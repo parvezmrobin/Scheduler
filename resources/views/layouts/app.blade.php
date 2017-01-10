@@ -53,6 +53,11 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
+                        <li><a href="{{ url('/Create Task')}}">Create Task</a></li>
+                        <li><a href="{{ url('/Circles')}}">Circles</a></li>
+                        <li><a href="{{ url('/Approval')}}">Approval</a></li>
+                        <li><a href="{{ url('/Settings')}}">Settings</a></li>
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
