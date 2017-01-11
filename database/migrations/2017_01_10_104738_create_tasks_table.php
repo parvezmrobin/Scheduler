@@ -20,7 +20,7 @@ class CreateTasksTable extends Migration
             $table->dateTime('to');
             $table->unsignedInteger('availability_id');
             $table->unsignedInteger('privacy_id');
-            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('type_id')->nullable();
             $table->string('location');
             $table->text('detail');
             $table->timestamps();
