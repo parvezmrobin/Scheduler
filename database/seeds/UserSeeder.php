@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'password' => bcrypt('secret'),
                 'sex_id' => rand(1, 3),
+                'api_token' => str_random(60),
                 'remember_token' => str_random(10),
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
