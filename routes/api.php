@@ -13,9 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('jwt.auth');
-
+Route::get('/tasks', 'HomeController@upcomingTasks');
 Route::post('auth', 'AuthenticateController@authenticate');
 Route::get('auth/me', 'AuthenticateController@getAuthenticatedUser');
