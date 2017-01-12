@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('sex_id');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('api_token', 64)->unique();
             $table->rememberToken();
             $table->timestamps();
 
