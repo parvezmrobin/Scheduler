@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/tasks', 'HomeController@upcomingTasks');
 Route::post('auth', 'AuthenticateController@authenticate');
-Route::get('auth/me', 'AuthenticateController@getAuthenticatedUser');
+
+Route::get('/tasks', 'HomeController@upcomingTasks')->middleware('jwt.auth');
+Route::get('auth/me', 'AuthenticateController@getAuthenticatedUser')->middleware('jwt.auth');
