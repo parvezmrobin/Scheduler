@@ -29,12 +29,21 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $appends = [
+        'associated_tasks', 'upcoming_tasks', 'ongoing_task'
+    ];
+
     public function tasks()
     {
         return $this->hasMany('App\Task');
     }
 
-    public function upcomingTasks()
+    public function getAssociatedTasksAttibute()
+    {
+        return $this->belongsToMany('App\Task');
+    }
+
+    public function getUpcomingTasksAttribute()
     {
         return DB::table('tasks')
             ->where([
@@ -43,7 +52,7 @@ class User extends Authenticatable
             ])->get();
     }
 
-    public function ongoingTask()
+    public function getOngoingTaskAttribute()
     {
         return DB::table('tasks')
             ->where([
@@ -51,5 +60,10 @@ class User extends Authenticatable
                 ['from', '<=', Carbon::now()],
                 ['to', '>=', Carbon::now()],
             ])->get();
+    }
+
+    public function circles()
+    {
+        return $this->hasMany('App\Circle');
     }
 }

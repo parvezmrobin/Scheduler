@@ -18,8 +18,17 @@ var app = new Vue({
     mounted() {
         Vue.http.get("{{url('api/v1/token')}}")
             .then((token) => {
-                Vue.http.get("{{url('api/v1/tasks') . '?token='}}" + token.data['token'])
-                    .then((response) => {this.tasks = response.data})
+                Vue.http.post("{{url('api/v1/create/create') . '?token='}}" + token.data['token'],
+                {
+                    title: 'title vua',
+                    from : '2017-2-4 3:3',
+                    to : '2017-4-2 5:5',
+                    location : 'vua location',
+                    detail : 'vua detail',
+                    privacy : 1,
+                    availability : 2,
+                    type : 3
+                }).then((response) => {this.tasks = [response.data]})
             })
     }
 })

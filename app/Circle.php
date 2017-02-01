@@ -13,6 +13,6 @@ class Circle extends Model
 
     public function members()
     {
-        return $this->belongsToMany('App\User', 'circle_memebers');
+        return $this->belongsToMany('App\User', 'circle_members');
     }
 }

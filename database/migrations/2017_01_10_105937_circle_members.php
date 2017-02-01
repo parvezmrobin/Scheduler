@@ -13,7 +13,7 @@ class CircleMembers extends Migration
      */
     public function up()
     {
-        Schema::create('circle_memebers', function (Blueprint $table) {
+        Schema::create('circle_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('circle_id');
             $table->unsignedInteger('user_id');
@@ -33,6 +33,6 @@ class CircleMembers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('circle_memebers');
+        Schema::dropIfExists('circle_members');
     }
 }
