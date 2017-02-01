@@ -6,14 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    protected $dates = ['created_at', 'updated_at', 'from', 'to'];
+
     public function availability()
     {
         return $this->hasOne('App\Availability');
-    }
-
-    public function circles()
-    {
-        return $this->hasMany('App\Circle');
     }
 
     public function privacy()
@@ -23,7 +20,7 @@ class Task extends Model
 
     public function tags()
     {
-        return $this->hasMany('App\Tag');
+        return $this->belongsToMany('App\Tag');
     }
 
     public function type()
@@ -31,9 +28,9 @@ class Task extends Model
         return $this->hasOne('App\Type');
     }
 
-    public function collaborators()
+    public function collaborations()
     {
-        return $this->belongsToMany('App\User');
+        return $this->hasMany('App\Collaborator');
     }
 
     public function user()

@@ -16,8 +16,10 @@ class TaskSeeder extends Seeder
         for($i = 0; $i<100; $i++){
             $task = [
                 'user_id' => App\User::all()->random()->id,
-                'from' => $faker->dateTimeBetween(new Carbon('last friday'), Carbon::today()),
-                'to' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
+                'title' => $faker->sentence,
+                'from' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
+                'to' => $faker->dateTimeBetween(new Carbon('next friday'),
+                    (new Carbon('next friday'))->addWeeks(1)),
                 'availability_id' => rand(1, 3),
                 'privacy_id' => rand(1, 3),
                 'type_id' => rand(1, 4),
@@ -26,7 +28,7 @@ class TaskSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
-            //var_dump($task);
+
             DB::table('tasks')->insert($task);
         }
 

@@ -18,3 +18,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/test', function ()
+{
+    return view('test');
+});
+
+Route::get('/api/v1/token', function (Request $request)
+{
+    if(!Auth::check())
+        return response()->json(['error' => 'unauthenticated'], 401);
+    $token = JWTAuth::fromUser(Auth::user());
+    if(!$token)
+        return response()->json(['error' => 'could_not_create_token'], 500);
+    return response()->json(compact('token'));
+});

@@ -31,9 +31,11 @@ class CircleSeeder extends Seeder
             $rand_users = $users->random(3);
             $rand_users = $rand_users->diff([$circle->user]);
             foreach ($rand_users as $key => $user) {
-                DB::table('circle_memebers')->insert([
+                DB::table('circle_members')->insert([
                     'circle_id' => $circle->id,
                     'user_id' => $user->id,
+                    'created_at' => Carbon\Carbon::now(),
+                    'updated_at' => Carbon\Carbon::now(),
                 ]);
             }
         }
