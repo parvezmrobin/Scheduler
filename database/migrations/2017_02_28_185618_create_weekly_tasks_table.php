@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrivaciesTable extends Migration
+class CreateWeeklyTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreatePrivaciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('privacies', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('privacy', 32);
+        Schema::create('weekly_tasks', function (Blueprint $table) {
+            $table->unsignedInteger('task_id')->primary();
+            $table->integer('repetition');
             $table->timestamps();
+
+            $table->foreign('task_id')->references('id')->on('tasks')
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,6 +30,6 @@ class CreatePrivaciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('privacies');
+        Schema::dropIfExists('weekly_tasks');
     }
 }

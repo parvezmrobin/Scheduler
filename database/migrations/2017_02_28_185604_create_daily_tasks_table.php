@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSexesTable extends Migration
+class CreateDailyTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateSexesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sexes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('sex', 16);
+        Schema::create('daily_tasks', function (Blueprint $table) {
+            $table->unsignedInteger('task_id')->primary();
+            $table->integer('repetition');
             $table->timestamps();
+
+            $table->foreign('task_id')->references('id')->on('tasks')
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,6 +30,6 @@ class CreateSexesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sexes');
+        Schema::dropIfExists('daily_tasks');
     }
 }

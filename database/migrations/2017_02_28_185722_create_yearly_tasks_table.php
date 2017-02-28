@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAvailabilitiesTable extends Migration
+class CreateYearlyTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateAvailabilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('availabilities', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('availability', 32);
+        Schema::create('yearly_tasks', function (Blueprint $table) {
+            $table->unsignedInteger('task_id')->primary();
+            $table->integer('repetition');
             $table->timestamps();
+
+            $table->foreign('task_id')->references('id')->on('tasks')
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,6 +30,6 @@ class CreateAvailabilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('availabilities');
+        Schema::dropIfExists('yearly_tasks');
     }
 }

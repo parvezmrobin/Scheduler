@@ -18,14 +18,11 @@ class CreateUsersTable extends Migration
             $table->string('user_name')->unique();
             $table->string('first_name');
             $table->string('last_name');
-            $table->unsignedInteger('sex_id');
+            $table->string('sex', 16);
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-
-            $table->foreign('sex_id')->references('id')->on('sexes')
-                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CircleMembers extends Migration
+class CreateAssociationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CircleMembers extends Migration
      */
     public function up()
     {
-        Schema::create('circle_members', function (Blueprint $table) {
+        Schema::create('associations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('circle_id');
+            $table->unsignedInteger('task_id');
             $table->unsignedInteger('user_id');
+            $table->boolean('is_approved');
             $table->timestamps();
 
-            $table->unique(['circle_id', 'user_id']);
-            $table->foreign('circle_id')->references('id')->on('circles')
+            $table->unique(['task_id', 'user_id']);
+            $table->foreign('task_id')->references('id')->on('tasks')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
@@ -34,6 +35,6 @@ class CircleMembers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('circle_members');
+        Schema::dropIfExists('associations');
     }
 }

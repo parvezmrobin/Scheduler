@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TaskWith extends Migration
+class CreateMonthlyTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,12 @@ class TaskWith extends Migration
      */
     public function up()
     {
-        Schema::create('task_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('task_id');
-            $table->unsignedInteger('user_id');
-            $table->boolean('is_approved');
+        Schema::create('monthly_tasks', function (Blueprint $table) {
+            $table->unsignedInteger('task_id')->primary();
+            $table->integer('repetition');
             $table->timestamps();
 
             $table->foreign('task_id')->references('id')->on('tasks')
-                ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -34,6 +30,6 @@ class TaskWith extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_user');
+        Schema::dropIfExists('monthly_tasks');
     }
 }

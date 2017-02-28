@@ -19,17 +19,17 @@ class UserSeeder extends Seeder
                 'last_name' => $faker->lastName,
                 'email' => $faker->unique()->safeEmail,
                 'password' => bcrypt('secret'),
-                'sex_id' => rand(1, 3),
+                'sex' => array_rand(['Male', 'Female', 'Other']),
                 'remember_token' => str_random(10),
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
             ];
 
-            if($user['sex_id'] == 1){
+            if($user['sex'] == 'Male'){
                 $user = array_merge($user,[
                     'first_name' => $faker->firstNameMale
                 ]);
-            }elseif ($user['sex_id'] == 2) {
+            }elseif ($user['sex'] == 'Female') {
                 $user = array_merge($user,[
                     'first_name' => $faker->firstNameFemale
                 ]);

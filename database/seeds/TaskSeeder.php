@@ -20,16 +20,57 @@ class TaskSeeder extends Seeder
                 'from' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
                 'to' => $faker->dateTimeBetween(new Carbon('next friday'),
                     (new Carbon('next friday'))->addWeeks(1)),
-                'availability_id' => rand(1, 3),
-                'privacy_id' => rand(1, 3),
-                'type_id' => rand(1, 4),
+                'availability' => array_rand(['Free', 'Busy', 'Unavailable']),
+                'privacy' => array_rand(['Private', 'Circle', 'Public']),
+                'type' => array_rand(['Family', 'Friends', 'Work']),
                 'location' => $faker->address,
                 'detail' => $faker->paragraph,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
 
-            DB::table('tasks')->insert($task);
+            $task_id = DB::table('tasks')->insertGetId($task);
+            $r = rand(1, 4);
+            if ($r === 1) {
+                DB::table('daily_tasks')->insert([
+                    'task_id' => $task_id,
+                    'repetition' => rand(1, 31),
+                    'created_at' => new Carbon,
+                    'updated_at' => new Carbon,
+                ]);
+            }elseif ($r === 2) {
+                DB::table('weekly_tasks')->insert([
+                    'task_id' => $task_id,
+                    'repetition' => rand(1, 4),
+                    'created_at' => new Carbon,
+                    'updated_at' => new Carbon,
+                ]);
+
+                $days = collect([1, 2, 3, 4, 5, 6, 7])->random(3);
+
+                foreach ($days as $key => $day) {
+                    DB::table('weekly_repetitions')->insert([
+                        'task_id' => $task_id,
+                        'week_day' => $day,
+                        'created_at' => new Carbon,
+                        'updated_at' => new Carbon,
+                    ]);
+                }
+            }elseif ($r===3) {
+                DB::table('monthly_tasks')->insert([
+                    'task_id' => $task_id,
+                    'repetition' => rand(1, 12),
+                    'created_at' => new Carbon,
+                    'updated_at' => new Carbon,
+                ]);
+            }else {
+                DB::table('yearly_tasks')->insert([
+                    'task_id' => $task_id,
+                    'repetition' => rand(1, 12),
+                    'created_at' => new Carbon,
+                    'updated_at' => new Carbon,
+                ]);
+            }
         }
 
         $tasks = App\Task::all();
@@ -41,7 +82,7 @@ class TaskSeeder extends Seeder
             $rand_users = $rand_users->diff(collect([$task->user]));
 
             foreach ($rand_users as $key => $value) {
-                DB::table('task_user')->insert([
+                DB::table('associations')->insert([
                     'task_id' => $task->id,
                     'user_id' => $value->id,
                     'is_approved' => rand(0, 1),

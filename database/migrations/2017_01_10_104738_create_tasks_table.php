@@ -19,20 +19,14 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->dateTime('from');
             $table->dateTime('to');
-            $table->unsignedInteger('availability_id');
-            $table->unsignedInteger('privacy_id');
-            $table->unsignedInteger('type_id')->nullable();
+            $table->string('availability');
+            $table->string('privacy');
+            $table->string('type')->nullable();
             $table->string('location');
-            $table->text('detail');
+            $table->text('detail')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
-                ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('availability_id')->references('id')->on('availabilities')
-                ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('privacy_id')->references('id')->on('privacies')
-                ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('type_id')->references('id')->on('types')
                 ->onDelete('cascade')->onUpdate('cascade');
         });
     }
