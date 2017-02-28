@@ -53,8 +53,8 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
-                        <li><a href="{{ url('/Create Task')}}">Create Task</a></li>
-                        <li><a href="{{ url('/Circles')}}">Circles</a></li>
+                        <li><a href="{{ url('/CreateTask')}}">Create Task</a></li>
+                        <li><a href="{{ url('/circle')}}">Circle</a></li>
                         <li><a href="{{ url('/Approval')}}">Approval</a></li>
                         <li><a href="{{ url('/Settings')}}">Settings</a></li>
 
