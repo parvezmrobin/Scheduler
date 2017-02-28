@@ -23,11 +23,18 @@ class CircleController extends Controller
     public function members(Request $request)
     {
         $id = $request->input('circle_id');
+        if (!$id) {
+            return response()->json([]);
+        }
         $circle = \App\Circle::find($id);
         if($circle->user_id !== $request->user()->id){
             return response()->json(["status" => "Unauthorized"], 403);
         }
-        $users = $circle->members;
+        $users = \DB::table('circle_members')
+            ->join('users', 'circle_members.user_id', 'users.id')
+            ->where('circle_id', $id)
+            ->select('users.*')
+            ->get();
 
         return response()->json($users);
     }
@@ -106,7 +113,7 @@ class CircleController extends Controller
                 if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
                     return response()->json(["status" => "Unauthorized"], 403);
                 }
-                
+
                 DB::table('circles')->where('id', $circleId)->delete();
                 return response()->json(['status' => "succeeded"]);
             }

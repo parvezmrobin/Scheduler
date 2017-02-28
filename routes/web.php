@@ -22,6 +22,21 @@ Route::get('/test', function ()
 {
     return view('test');
 });
+Route::get('/privacy', function(){
+    return view('mimtest');
+});
+Route::get('/circle', function(){
+    return view('Circle');
+});
+route::get('/circleRead',function(){
+    return view('CircleRead');
+});
+route::get('/circleUpdate',function(){
+    return view('CircleUpdate');
+});
+route::get('/circleDelete',function(){
+    return view('CircleDelete');
+});
 
 Route::get('/api/v1/token', function (Request $request)
 {
