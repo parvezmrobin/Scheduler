@@ -16,12 +16,13 @@ class ApproveController extends Controller
     public function pending(Request $request)
     {
         $user = $request->user();
-        $pendingTasks = DB::table('task_user')
-        ->join('tasks', 'task_user.task_id', 'tasks.id')
+        $pendingTasks = DB::table('associations')
+        ->join('tasks', 'associations.task_id', 'tasks.id')
         ->where([
             ['task_user.user_id', $user->id],
             ['task_user.is_approved', 0],
-        ])->select('tasks.*')->get();
+        ]
+        )->select('tasks.*')->get();
 
         return response()->json($pendingTasks);
     }
@@ -29,12 +30,13 @@ class ApproveController extends Controller
     public function approved(Request $request)
     {
         $user = $request->user();
-        $approvedTasks = DB::table('task_user')
-        ->join('tasks', 'task_user.task_id', 'tasks.id')
+        $approvedTasks = DB::table('associations')
+        ->join('tasks', 'associations.task_id', 'tasks.id')
         ->where([
-            ['task_user.user_id', $user->id],
-            ['task_user.is_approved', 1],
-        ])->select('tasks.*')->get();
+            ['associations.user_id', $user->id],
+            ['associations.is_approved', 1],
+        ]
+        )->select('tasks.*')->get();
 
         return response()->json($approvedTasks);
     }
@@ -44,10 +46,11 @@ class ApproveController extends Controller
         $taskId = $request->input('task_id');
         $userId = $request->user()->id;
 
-        DB::table('task_user')->where([
+        DB::table('associations')->where([
             ['user_id', $userId],
             ['task_id', $taskId]
-        ])->update(['is_approved' => 1]);
+        ]
+        )->update(['is_approved' => 1]);
 
         return response()->json(['status' => 'succeeded']);
     }
@@ -57,10 +60,11 @@ class ApproveController extends Controller
         $taskId = $request->input('task_id');
         $userId = $request->user()->id;
 
-        DB::table('task_user')->where([
+        DB::table('associations')->where([
             ['user_id', $userId],
             ['task_id', $taskId]
-        ])->update(['is_approved' => 0]);
+        ]
+        )->update(['is_approved' => 0]);
 
         return response()->json(['status' => 'succeeded']);
     }
@@ -70,10 +74,11 @@ class ApproveController extends Controller
         $taskId = $request->input('task_id');
         $userId = $request->user()->id;
 
-        DB::table('task_user')->where([
+        DB::table('associations')->where([
             ['user_id', $userId],
             ['task_id', $taskId]
-        ])->delete();
+        ]
+        )->delete();
 
         return response()->json(['status' => 'succeeded']);
     }

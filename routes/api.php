@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 Route::post('auth', 'AuthenticateController@authenticate');
 
 Route::get('home/user', 'HomeController@user');
-Route::get('home/tasks', 'HomeController@upcomingTasks');
-Route::get('home/ongoing', 'HomeController@ongoingTask');
+Route::get('home/tasks', 'HomeController@tasks');
+Route::get('home/trending', 'HomeController@trending');
 
 Route::get('create/privacies', 'CreateController@privacies');
 Route::get('create/availabilities', 'CreateController@availabilities');

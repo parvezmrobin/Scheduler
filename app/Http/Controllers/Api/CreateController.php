@@ -16,21 +16,6 @@ class CreateController extends Controller
         $this->middleware('jwt.auth');
     }
 
-    public function privacies()
-    {
-        return response()->json(\App\Privacy::all());
-    }
-
-    public function availabilities()
-    {
-        return response()->json(\App\Availability::all());
-    }
-
-    public function types()
-    {
-        return response()->json(\App\Type::all());
-    }
-
     public function tagSearch(Request $request)
     {
         $keyword = $request->input('tag');
@@ -101,11 +86,12 @@ class CreateController extends Controller
         $task->to = $request->input('to');
         $task->location = $request->input('location');
         $task->detail = $request->input('detail');
-        $task->privacy_id = $request->input('privacy');
-        $task->availability_id = $request->input('availability');
-        $task->type_id = $request->input('type');
+        $task->privacy = $request->input('privacy');
+        $task->availability = $request->input('availability');
+        $task->type = $request->input('type');
 
         $task->save();
+
         $tags = $request->input('tags');
         if($tags){
             foreach ($tags as $key => $tag) {
@@ -121,7 +107,7 @@ class CreateController extends Controller
         $users = $request->input('users');
         if($users){
             foreach ($users as $key => $user) {
-                DB::table('users')->insert([
+                DB::table('associations')->insert([
                     'user_id' => $user,
                     'task_id' => $task->id,
                     'created_at' => Carbon::now(),
@@ -136,7 +122,7 @@ class CreateController extends Controller
 
     public function update(Request $Request)
     {
-        $task = \App\Task::find($request->input('id'));
+        $task = Task::find($request->input('id'));
         $user = $request->user();
         if($user->can('update', $task)){
             $task->user_id = $user->id;
@@ -145,9 +131,9 @@ class CreateController extends Controller
             $task->to = $request->input('to');
             $task->location = $request->input('location');
             $task->detail = $request->input('detail');
-            $task->privacy_id = $request->input('privacy');
-            $task->availability_id = $request->input('availability');
-            $task->type_id = $request->input('type');
+            $task->privacy = $request->input('privacy');
+            $task->availability = $request->input('availability');
+            $task->type = $request->input('type');
 
             $task->save();
 
@@ -164,20 +150,6 @@ class CreateController extends Controller
                 }
             }
 
-            DB::table('task_user')->where('task_id', $taks->id)->delete();
-            $users = $request->input('users');
-            if($users){
-                foreach ($users as $key => $user) {
-                    DB::table('task_user')->insert([
-                        'user_id' => $user,
-                        'task_id' => $task->id,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                        'is_approved' => 0,
-                    ]);
-                }
-            }
-
             return response()->json($task);
         }
 
@@ -186,9 +158,9 @@ class CreateController extends Controller
 
     public function delete(Request $request)
     {
-        $task = \App\Task::find($request->input('task_id'));
+        $task = Task::find($request->input('task_id'));
         if($request->user()->can('delete', $task)){
-            \App\Task::where('id', $task->id)->delete();
+            Task::where('id', $task->id)->delete();
             return response()->json(["status" => "succeeded"]);
         }
 

@@ -15,7 +15,9 @@ class CircleController extends Controller
 
     public function circles(Request $request)
     {
-        $circles = $request->user()->circles;
+        $circles = DB::table('circles')
+        ->where('user_id', $request->user()->id)
+        ->get();
 
         return response()->json($circles);
     }
@@ -31,10 +33,10 @@ class CircleController extends Controller
             return response()->json(["status" => "Unauthorized"], 403);
         }
         $users = \DB::table('circle_members')
-            ->join('users', 'circle_members.user_id', 'users.id')
-            ->where('circle_id', $id)
-            ->select('users.*')
-            ->get();
+        ->join('users', 'circle_members.user_id', 'users.id')
+        ->where('circle_id', $id)
+        ->select('users.*')
+        ->get();
 
         return response()->json($users);
     }
@@ -102,19 +104,20 @@ class CircleController extends Controller
             DB::table('circle_members')->where([
                 ['user_id', $userId],
                 ['circle_id', $circleId]
-                ])->delete();
+            ]
+            )->delete();
 
-                return response()->json(['status' => "succeeded"]);
-            }
-
-            public function deleteCircle(Request $request)
-            {
-                $circleId = $request->input('circle_id');
-                if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
-                    return response()->json(["status" => "Unauthorized"], 403);
-                }
-
-                DB::table('circles')->where('id', $circleId)->delete();
-                return response()->json(['status' => "succeeded"]);
-            }
+            return response()->json(['status' => "succeeded"]);
         }
+
+        public function deleteCircle(Request $request)
+        {
+            $circleId = $request->input('circle_id');
+            if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
+                return response()->json(["status" => "Unauthorized"], 403);
+            }
+
+            DB::table('circles')->where('id', $circleId)->delete();
+            return response()->json(['status' => "succeeded"]);
+        }
+    }
