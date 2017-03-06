@@ -77,47 +77,48 @@ class CircleController extends Controller
         $res = DB::table('circle_members')->where([
             ['user_id', $userId],
             ['circle_id', $circleId]
-            ])->get();
+        ]
+        )->get();
 
-            if($res->count() > 0){
-                return response()->json(["status" => "Aleady Existing"], 500);
-            }
-
-            $id = DB::table('circle_members')->insertGetId ([
-                'user_id' => $userId,
-                'circle_id' => $circleId,
-            ]);
-            return response()->json(
-                DB::table('users')->find($userId)
-            );
-
+        if($res->count() > 0){
+            return response()->json(["status" => "Aleady Existing"], 500);
         }
 
-        public function deleteUser(Request $request)
-        {
-            $userId = $request->input('user_id');
-            $circleId = $request->input('circle_id');
-            if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
-                return response()->json(["status" => "Unauthorized"], 403);
-            }
+        $id = DB::table('circle_members')->insertGetId ([
+            'user_id' => $userId,
+            'circle_id' => $circleId,
+        ]);
+        return response()->json(
+            DB::table('users')->find($userId)
+        );
 
-            DB::table('circle_members')->where([
-                ['user_id', $userId],
-                ['circle_id', $circleId]
-            ]
-            )->delete();
-
-            return response()->json(['status' => "succeeded"]);
-        }
-
-        public function deleteCircle(Request $request)
-        {
-            $circleId = $request->input('circle_id');
-            if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
-                return response()->json(["status" => "Unauthorized"], 403);
-            }
-
-            DB::table('circles')->where('id', $circleId)->delete();
-            return response()->json(['status' => "succeeded"]);
-        }
     }
+
+    public function deleteUser(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $circleId = $request->input('circle_id');
+        if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
+            return response()->json(["status" => "Unauthorized"], 403);
+        }
+
+        DB::table('circle_members')->where([
+            ['user_id', $userId],
+            ['circle_id', $circleId]
+        ]
+        )->delete();
+
+        return response()->json(['status' => "succeeded"]);
+    }
+
+    public function deleteCircle(Request $request)
+    {
+        $circleId = $request->input('circle_id');
+        if(\App\Circle::find($circleId)->user_id !== $request->user()->id){
+            return response()->json(["status" => "Unauthorized"], 403);
+        }
+
+        DB::table('circles')->where('id', $circleId)->delete();
+        return response()->json(['status' => "succeeded"]);
+    }
+}

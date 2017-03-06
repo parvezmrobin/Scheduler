@@ -18,13 +18,12 @@ Route::get('home/user', 'HomeController@user');
 Route::get('home/tasks', 'HomeController@tasks');
 Route::get('home/trending', 'HomeController@trending');
 
-Route::get('create/privacies', 'CreateController@privacies');
-Route::get('create/availabilities', 'CreateController@availabilities');
-Route::get('create/privacies', 'CreateController@privacies');
-Route::get('create/types', 'CreateController@types');
-Route::get('create/tags', 'CreateController@tagSearch');
-Route::get('create/users', 'CreateController@userSearch');
-Route::post('create/create', 'CreateController@create');
+Route::get('task/tags', 'TaskController@tagSearch');
+Route::get('task/users', 'TaskController@userSearch');
+Route::get('task', 'TaskController@show');
+Route::post('task', 'TaskController@create');
+Route::put('task', 'TaskController@update');
+Route::delete('task', 'TaskController@delete');
 
 Route::get('profile/user', 'ProfileController@user');
 Route::get('profile/tasks', 'ProfileController@tasks');

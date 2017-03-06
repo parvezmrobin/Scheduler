@@ -8,12 +8,22 @@ use App\Task;
 use Carbon\Carbon;
 use DB;
 
-class CreateController extends Controller
+class TaskController extends Controller
 {
 
     public function __construct()
     {
         $this->middleware('jwt.auth');
+    }
+
+    public function show(Request $request, $id)
+    {
+        $task = Task::find($id);
+        $user = $request->user();
+        if ($user->can('view', $task)) {
+            return response()->json($task);
+        }
+        return response()->json(["status"=>"Unauthorized"], 403);
     }
 
     public function tagSearch(Request $request)
@@ -120,7 +130,7 @@ class CreateController extends Controller
         return response()->json($task);
     }
 
-    public function update(Request $Request)
+    public function update(Request $request)
     {
         $task = Task::find($request->input('id'));
         $user = $request->user();
