@@ -80,7 +80,7 @@ class CircleController extends Controller
             ])->get();
 
             if($res->count() > 0){
-                return response()->json($res[0]);
+                return response()->json(["status" => "Aleady Existing"], 500);
             }
 
             $id = DB::table('circle_members')->insertGetId ([
@@ -88,7 +88,7 @@ class CircleController extends Controller
                 'circle_id' => $circleId,
             ]);
             return response()->json(
-                DB::table('circle_members')->where('id', $id)->get()
+                DB::table('users')->find($userId)
             );
 
         }

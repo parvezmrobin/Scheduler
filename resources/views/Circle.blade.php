@@ -32,9 +32,9 @@
     </div>
     <br>
     <div class="form-group">
-        <label for="users" class="control-label col-md-4">Search Member</label>
+        <label for="users" class="control-label col-md-4">Search Member to Add</label>
         <div class="col-md-8">
-            <input type="search" class="form-control" name="" value="" v-on:search="blah">
+            <input type="search" placeholder="Type a part of name" class="form-control" v-model="search" name="" value="" v-on:search="searchChanged">
         </div>
         <div class="col-md-offset-4 col-md-6">
             <select class="form-control" multiple="multiple" v-model="selected_users" style="border:none; overflow-y:visible">
@@ -43,7 +43,7 @@
         </div>
         <div class="col-md-2">
             <input type="button" name="" value="Add"
-            class="btn btn-success" style="float:right; margin-top:5px; width:100%" v-on:click="log">
+            class="btn btn-success" style="float:right; margin-top:5px; width:100%" v-on:click="addMember">
         </div>
     </div>
     <div class="form-group">
@@ -145,8 +145,9 @@ var app = new Vue({
         circle : '',
         members: [],
         circle_id: '',
-        users : [{id: -1, first_name: 'Loading', last_name:'...'}],
-        selected_users: []
+        users : [],
+        selected_users: [],
+        search: ''
     },
     watch: {
         circle_id:function(val) {
@@ -160,24 +161,35 @@ var app = new Vue({
         's-member':member
     },
     methods:{
-        blah: function () {
-            this.users.push({id: Math.random()%100, first_name: 'Loading', last_name:'...'})
-        },
-        log: function () {
-            console.log(this.selected_users);
+        addMember:function() {
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response)=>{
+                var token=  response.data['token'];
+                for (var user in this.selected_users) {
+                    var url= '{{url("api/v1/circle/add")}}'+'?token=' + token+ '&user_id=' + this.selected_users[user] + '&circle_id=' + this.circle_id;
+                    Vue.http.post(url)
+                    .then((response)=>{
+                        if(response.status != 200){
+                            alert(response.statusText);
+                            return;
+                        }
+                        this.members.splice(this.members.length,0,response.data)
+                    })
+                }
+                users=[];
+            })
         },
         searchChanged : function () {
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
-                var toekn = response.data['token'];
-                var url = '{{url("api/v1/circle/circle")}}' + '?token=' + token + '&user=' + this.user;
+                var token = response.data['token'];
+                var url = '{{url("api/v1/create/users")}}' + '?token=' + token + '&user=' + this.search;
                 Vue.http.get(url)
                 .then((response) => {
                     if(response.status != 200){
                         alert(response.statusText);
                         return;
                     }
-
                     this.users = response.data;
                 })
             });
@@ -220,7 +232,6 @@ var app = new Vue({
             })
         },
         reloadMember: function () {
-
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response)=>{
                 var t= response.data['token'];
