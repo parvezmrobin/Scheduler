@@ -183,7 +183,7 @@ var app = new Vue({
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data['token'];
-                var url = '{{url("api/v1/create/users")}}' + '?token=' + token + '&user=' + this.search;
+                var url = '{{url("api/v1/task/users")}}' + '?token=' + token + '&user=' + this.search;
                 Vue.http.get(url)
                 .then((response) => {
                     if(response.status != 200){
