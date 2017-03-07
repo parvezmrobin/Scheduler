@@ -19,15 +19,15 @@ class TaskPolicy
      */
     public function view(User $user, Task $task)
     {
-        if($taks->privacy_id === 3){
+        if($taks->privacy === 3){
             return true;
         }
 
-        if($task->privacy_id === 1 && $task->user_id === $user->id){
+        if($task->privacy === 1 && $task->user_id === $user->id){
             return true;
         }
 
-        if($task->privacy_id === 2){
+        if($task->privacy === 2){
             $creator = $task->user;
             foreach ($creator->circles as $key => $circle) {
                 if($circle->members->contains($user)){

@@ -3,11 +3,11 @@
 @section('content')
 <div class="row">
     <div class="form-horizontal col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
-        <a v-for="task in tasks" href="../task" style="text-decoration:none; color:inherit">
-            <div class="panel panel-default" >
+        <a v-for="task in tasks" :href="makeUrl(task)" style="text-decoration:none; color:inherit">
+            <div :class="chooseClass(task)" >
                 <p class="panel-heading text-centre" style="font-size:xx-large" >@{{task.title}}</p>
                 <div class="panel-body">
-                    <strong style="font-size:large">Starts at: @{{task.from}}</strong>
+                    <strong style="font-size:large">Starts at: @{{formatDateTime(task.from)}}</strong>
                     <br>
                     @{{task.detail}}
                 </div>
@@ -18,12 +18,27 @@
 @endsection
 
 @section('script')
-
+<script src="js/moment.min.js" charset="utf-8"></script>
 <script type="text/javascript">
 var app = new Vue({
     el:'#app',
     data: {
         tasks:[]
+    },
+    methods: {
+        formatDateTime: function (dateTime) {
+            return moment(dateTime).fromNow();
+        },
+        makeUrl : function (task) {
+            return '../task/' + task.id
+        },
+        chooseClass: function (task) {
+            var now = moment()
+            if(moment(task.from)<=now && moment(task.to)>now){
+                return 'panel panel-info';
+            }
+            return 'panel panel-default';
+        }
     },
     mounted(){
         Vue.http.get('{{url('api/v1/token')}}')

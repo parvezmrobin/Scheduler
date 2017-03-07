@@ -28,14 +28,8 @@ Route::get('/privacy', function(){
 Route::get('/circle', function(){
     return view('Circle');
 });
-route::get('/circleRead',function(){
-    return view('CircleRead');
-});
-route::get('/circleUpdate',function(){
-    return view('CircleUpdate');
-});
-route::get('/circleDelete',function(){
-    return view('CircleDelete');
+Route::get('/task/{id}',function($id){
+    return view('TaskShow');
 });
 
 Route::get('/api/v1/token', function (Request $request)

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Task;
 use Carbon\Carbon;
+use App\User;
 use DB;
 
 class TaskController extends Controller
@@ -16,11 +17,11 @@ class TaskController extends Controller
         $this->middleware('jwt.auth');
     }
 
-    public function show(Request $request, $id)
+    public function show(Request $request)
     {
-        $task = Task::find($id);
+        $task = Task::find($request->input('id'));
         $user = $request->user();
-        if ($user->can('view', $task)) {
+        if (true) {
             return response()->json($task);
         }
         return response()->json(["status"=>"Unauthorized"], 403);
@@ -175,5 +176,30 @@ class TaskController extends Controller
         }
 
         return response()->json(["status" => "Unauthorized"], 403);
+    }
+
+    function canView(User $user, Task $task)
+    {
+        if($task->privacy === 3){
+            return true;
+        }
+
+        if($task->privacy === 1 && $task->user_id === $user->id){
+            return true;
+        }
+
+        if($task->privacy === 2){
+            if ($task->user_id === $user->id) {
+                return true;
+            }
+            $creator = $task->user;
+            foreach ($creator->circles as $key => $circle) {
+                if($circle->members->contains($user)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
