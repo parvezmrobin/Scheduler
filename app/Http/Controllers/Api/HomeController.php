@@ -50,7 +50,7 @@ class HomeController extends Controller
         ->join('associations', 'associations.task_id', 'tasks.id')
         ->where('tasks.to', '<', new Carbon)
         ->whereRaw($rawWhere)->select
-        ($this->selectExt('YEA'));
+        ($this->selectExt('YEAR'));
 
         $res = $genereal
         ->union($daily)

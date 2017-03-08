@@ -6,7 +6,7 @@
     <s-circle :circle="circle.circle" :id="circle.id"></s-circle>
 </div> -->
 
-<div class="form-horizontal">
+<div class="form-horizontal" v-cloak>
     <div class="form-group">
         <label for="circles" class="control-label col-md-2">Select Circle</label>
         <div class="col-md-10">

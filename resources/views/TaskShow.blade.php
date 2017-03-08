@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row">
+    <div class="row" v-cloak>
         <div class="panel panel-default col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2" style="border:none" v-if="task!=null">
             <p class="panel-heading text-centre" style="font-size:xx-large">@{{task.title}}</p>
             <div class="panel-body">
