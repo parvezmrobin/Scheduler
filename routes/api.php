@@ -20,6 +20,8 @@ Route::get('home/trending', 'HomeController@trending');
 
 Route::get('task/tags', 'TaskController@tagSearch');
 Route::get('task/users', 'TaskController@userSearch');
+Route::get('task/taks/tags', 'TaskController@tagTask');
+Route::get('task/task/users', 'TaskController@associations');
 Route::get('task', 'TaskController@show');
 Route::post('task', 'TaskController@create');
 Route::put('task', 'TaskController@update');

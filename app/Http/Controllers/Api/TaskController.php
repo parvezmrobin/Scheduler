@@ -135,11 +135,10 @@ class TaskController extends Controller
     {
         $task = Task::find($request->input('id'));
         $user = $request->user();
-        if($user->can('update', $task)){
-            $task->user_id = $user->id;
+        if($user->id === $task->user_id){
             $task->title = $request->input('title');
-            $task->from = $request->input('from');
-            $task->to = $request->input('to');
+            $task->from = str_replace('T', ' ', $request->input('from'));
+            $task->to = str_replace('T', ' ', $request->input('to'));
             $task->location = $request->input('location');
             $task->detail = $request->input('detail');
             $task->privacy = $request->input('privacy');
@@ -170,12 +169,47 @@ class TaskController extends Controller
     public function delete(Request $request)
     {
         $task = Task::find($request->input('task_id'));
-        if($request->user()->can('delete', $task)){
+        if($request->user()->id === $task->user_id){
             Task::where('id', $task->id)->delete();
             return response()->json(["status" => "succeeded"]);
         }
 
         return response()->json(["status" => "Unauthorized"], 403);
+    }
+
+    public function tagTask(Request $request)
+    {
+        $id = $request->input('task_id');
+        $task = Task::find($id);
+        if($task->user_id === $request->user()->id){
+            $tags = DB::table('tag_task')
+            ->join('tags', 'tags.id', 'tag_id')
+            ->where('task_id', $id)
+            ->select('tags.*')
+            ->get();
+
+            return response()->json($tags);
+        }
+
+        return response()->json(["status" => "Unauthorized"], 403);
+    }
+
+    public function associations(Request $request)
+    {
+        $id = $request->input('task_id');
+        $task = Task::find($id);
+        if($task->user_id === $request->user()->id){
+            $users = DB::table('associations')
+            ->join('users', 'users.id', 'user_id')
+            ->where('task_id', $id)
+            ->select('users.*', 'is_approved')
+            ->get();
+
+            return response()->json($users);
+        }
+
+        return response()->json(["status" => "Unauthorized"], 403);
+
     }
 
     function canView(User $user, Task $task)
