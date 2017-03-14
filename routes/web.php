@@ -28,6 +28,9 @@ Route::get('/privacy', function(){
 Route::get('/circle', function(){
     return view('Circle');
 });
+Route::get('/create',function(){
+    return view('CreateTask');
+});
 Route::get('/task/{id}',function($id){
     return view('TaskShow');
 });
