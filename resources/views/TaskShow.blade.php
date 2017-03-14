@@ -25,6 +25,14 @@ div.evenly span{
     border-radius: 5px;
     margin: 5px;
 }
+.tagging{
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: inherit;
+    background-color: skyblue;
+    padding: 5px;
+    margin: 5px;
+}
 </style>
 @endsection
 @section('content')
@@ -69,9 +77,9 @@ div.evenly span{
                     <label for="" class="control-label col-md-2">Tags</label>
                     <div class="col-md-10">
 
-                        <ul class="list-group">
-                            <li class="list-group-item" v-for="tag in tags">@{{tag.tag}}</li>
-                        </ul>
+                        <div>
+                            <span class="tagging" v-for="tag in tags">@{{tag.tag}}</span>
+                        </div>
 
                     </div>
                 </div>

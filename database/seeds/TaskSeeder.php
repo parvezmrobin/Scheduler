@@ -13,6 +13,9 @@ class TaskSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create();
+        $availability = ['Free', 'Busy', 'Unavailable'];
+        $privacy = ['Private', 'Circle', 'Public'];
+        $type = ['Family', 'Friends', 'Work'];
         for($i = 0; $i<100; $i++){
             $task = [
                 'user_id' => App\User::all()->random()->id,
@@ -20,9 +23,9 @@ class TaskSeeder extends Seeder
                 'from' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
                 'to' => $faker->dateTimeBetween(new Carbon('next friday'),
                     (new Carbon('next friday'))->addWeeks(1)),
-                'availability' => array_rand(['Free', 'Busy', 'Unavailable']),
-                'privacy' => array_rand(['Private', 'Circle', 'Public']),
-                'type' => array_rand(['Family', 'Friends', 'Work']),
+                'availability' => $availability[array_rand($availability)],
+                'privacy' => $privacy[array_rand($privacy)],
+                'type' => $type[array_rand($type)],
                 'location' => $faker->address,
                 'detail' => $faker->paragraph,
                 'created_at' => Carbon::now(),

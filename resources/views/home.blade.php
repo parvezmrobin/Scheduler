@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="form-horizontal col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2">
+<div class="row" v-cloak>
+    <div class="col-md-8">
         <a v-for="task in tasks" :href="makeUrl(task)" style="text-decoration:none; color:inherit">
             <div :class="chooseClass(task)" >
                 <p class="panel-heading text-centre" style="font-size:xx-large" >@{{task.title}}</p>
@@ -14,7 +14,15 @@
             </div>
         </a>
     </div>
-    
+
+    <div class="form-group col-md-4">
+        <label for="TrendingTags" class="control-label col-md-4">Trending tags</label>
+        <div class="col-md-8 list-group">
+            <a class="list-group-item" href="#" v-for="tag in tags" >@{{tag.tag}} <span class="badge">@{{tag.count}}</span></a>
+        </div>
+    </div>
+
+
 </div>
 @endsection
 
@@ -24,7 +32,8 @@
 var app = new Vue({
     el:'#app',
     data: {
-        tasks:[]
+        tasks:[],
+        tags: []
     },
     methods: {
         formatDateTime: function (dateTime) {
@@ -54,8 +63,16 @@ var app = new Vue({
                     return;
                 }
                 this.tasks=response.data;
-
-            })
+            });
+            url='{{url('api/v1/home/trending')}}?token='+ token;
+            Vue.http.get(url)
+            .then((response) => {
+                if(response.status!=200){
+                    console.log(responsse.statusText);
+                    return;
+                }
+                this.tags=response.data;
+            });
         })
     }
 })

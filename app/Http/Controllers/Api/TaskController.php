@@ -21,7 +21,7 @@ class TaskController extends Controller
     {
         $task = Task::find($request->input('id'));
         $user = $request->user();
-        if (true) {
+        if ($this->canView($user, $task)) {
             return response()->json($task);
         }
         return response()->json(["status"=>"Unauthorized"], 403);
@@ -181,7 +181,7 @@ class TaskController extends Controller
     {
         $id = $request->input('task_id');
         $task = Task::find($id);
-        if($task->user_id === $request->user()->id){
+        if($this->canView($request->user(), $task)){
             $tags = DB::table('tag_task')
             ->join('tags', 'tags.id', 'tag_id')
             ->where('task_id', $id)
@@ -198,7 +198,7 @@ class TaskController extends Controller
     {
         $id = $request->input('task_id');
         $task = Task::find($id);
-        if($task->user_id === $request->user()->id){
+        if($this->canView($request->user(), $task)){
             $users = DB::table('associations')
             ->join('users', 'users.id', 'user_id')
             ->where('task_id', $id)
@@ -214,20 +214,44 @@ class TaskController extends Controller
 
     function canView(User $user, Task $task)
     {
+        return true;
         if($task->privacy === 3){
             return true;
         }
 
-        if($task->privacy === 1 && $task->user_id === $user->id){
-            return true;
+        if($task->privacy === 1){
+            if($task->user_id === $user->id){
+                return true;
+            }
+
+            $associations = DB::table('task_user')->where([
+                ['user_id', $user->id],
+                ['task_id', $task->id]
+            ]
+            )->get();
+            if ($associations->count() > 0) {
+                return true;
+            }
+            return false;
         }
 
         if($task->privacy === 2){
             if ($task->user_id === $user->id) {
                 return true;
             }
+
+            $associations = DB::table('task_user')->where([
+                ['user_id', $user->id],
+                ['task_id', $task->id]
+            ]
+            )->get();
+            if ($associations->count()) {
+                return true;
+            }
+
             $creator = $task->user;
-            foreach ($creator->circles as $key => $circle) {
+            $circles = \App\Circle::where('user_id', $creator->id)->get();
+            foreach ($circles as $key => $circle) {
                 if($circle->members->contains($user)){
                     return true;
                 }
