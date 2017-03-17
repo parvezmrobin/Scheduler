@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWeeklyRepetitionsTable extends Migration
+class CreateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateWeeklyRepetitionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('weekly_repetitions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('task_id');
-            $table->integer('week_day');
+        Schema::create('settings', function (Blueprint $table) {
+            $table->unsignedInteger('user_id')->primary();
+            $table->string('privacy');
+            $table->string('availability');
+            $table->string('type');
             $table->timestamps();
 
-            $table->unique(['task_id', 'week_day']);
-            $table->foreign('task_id')->references('task_id')->on('weekly_tasks')
+            $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -32,6 +32,6 @@ class CreateWeeklyRepetitionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('weekly_repetitions');
+        Schema::dropIfExists('settings');
     }
 }

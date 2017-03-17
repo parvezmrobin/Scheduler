@@ -21,8 +21,9 @@ class ApproveController extends Controller
         ->where([
             ['task_user.user_id', $user->id],
             ['task_user.is_approved', 0],
+            ['tasks.from', '>', new Carbon\Carbon],
         ]
-        )->select('tasks.*')->get();
+        )->select('tasks.*')->latest()->get();
 
         return response()->json($pendingTasks);
     }

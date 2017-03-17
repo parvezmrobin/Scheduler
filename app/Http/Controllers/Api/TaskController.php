@@ -215,11 +215,11 @@ class TaskController extends Controller
     function canView(User $user, Task $task)
     {
         return true;
-        if($task->privacy === 3){
+        if(strcmp($task->privacy, 'public')){
             return true;
         }
 
-        if($task->privacy === 1){
+        if(strcmp($task->privacy, 'private')){
             if($task->user_id === $user->id){
                 return true;
             }
@@ -235,7 +235,7 @@ class TaskController extends Controller
             return false;
         }
 
-        if($task->privacy === 2){
+        if(strcmp($task->privacy, 'circle')){
             if ($task->user_id === $user->id) {
                 return true;
             }
