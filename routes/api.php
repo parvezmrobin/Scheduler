@@ -43,3 +43,6 @@ Route::get('approve/approved', 'ApproveController@approved');
 Route::put('approve/approve', 'ApproveController@approve');
 Route::put('approve/disapprove', 'ApproveController@removeApproval');
 Route::delete('approve/delete', 'ApproveController@deleteRequest');
+
+Route::get('settings', 'SettingsController@get');
+Route::put('settings', 'SettingsController@set');
