@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
 <div class="row">
+    <div class="panel panel-primary col-md-8 col-md-offset-2 form-horizontal">
+        <p class="panel-heading text-centre" style="font-size:xx-large" >Create Task</p>
+
+
     <div class="form-group">
         <label for="taskTitle" class="control-label col-md-2 col-md-offset-2">Title</label>
         <div class="col-md-6">
@@ -77,7 +81,7 @@
         <div class="col-md-6">
             <input id="tag" type="search" v-model="searchkey" @search="onSearch" class="form-control">
         </div>
-    
+
 
     </div>
     <br>
@@ -86,8 +90,30 @@
             <button type="button" @click="addTag" class="btn btn-info">Add Tag</button>
         </div>
     </div>
+    <div class="form-group">
+        <label for="users" class="control-label col-md-2 col-md-offset-2">Users</label>
+        <div class="col-md-6">
+            <span v-for="(user, index) in users" class="tag-item">
+                @{{user.first_name+ ' '+user.last_name}}
+                <a href="#" @click="removeUser(index)">x</a>
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="user" class="control-label col-md-2 col-md-offset-2">Search for User</label>
+        <div class="col-md-6">
+            <input id="user" type="search" v-model="searchkey" @search="onSearch" class="form-control">
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <div class="col-md-2 col-md-offset-6">
+            <button type="button" @click="addUser" class="btn btn-info">Add User</button>
+        </div>
+    </div>
 
 
+</div>
 
 
 </div>

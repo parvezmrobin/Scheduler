@@ -7,7 +7,8 @@
             <div :class="chooseClass(task)" >
                 <p class="panel-heading text-centre" style="font-size:xx-large" >@{{task.title}}</p>
                 <div class="panel-body">
-                    <strong style="font-size:large">Starts at: @{{formatDateTime(task.from)}}</strong>
+
+                    <strong style="font-size:large">@{{formatDateTime(task.from)}}</strong>
                     <br>
                     @{{task.detail}}
                 </div>
@@ -37,7 +38,12 @@ var app = new Vue({
     },
     methods: {
         formatDateTime: function (dateTime) {
-            return moment(dateTime).fromNow();
+            var time =  moment(dateTime);
+
+            if(time< moment()){
+                return 'Started ' + time.fromNow();
+            }
+            return 'Starts ' + time.fromNow();
         },
         makeUrl : function (task) {
             return '../task/' + task.id

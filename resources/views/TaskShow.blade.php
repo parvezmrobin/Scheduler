@@ -33,6 +33,7 @@ div.evenly span{
     padding: 5px;
     margin: 5px;
 }
+
 </style>
 @endsection
 @section('content')
