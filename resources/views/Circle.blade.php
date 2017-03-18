@@ -123,212 +123,193 @@
 
 @section('script')
 <script type="text/javascript">
-
-var member= {
-    props:['id','member'],
-    template:'<div class="list-group-item list-group-item-info">\
+/* eslint-disable indent, no-multi-str */
+/* global Vue, _ */
+var member = {
+    props: ['id', 'member'],
+    template: '<div class="list-group-item list-group-item-info">\
     @{{member}}\
     <a href="#" v-on:click="removeMember" style="float:right" class="btn btn-sm btn-danger">Delete</a>\
     </div>',
     methods: {
         removeMember: function () {
-            this.$emit('memberremove', this.id)
+            this.$emit('memberremove', this.id);
         }
 
     }
-}
+};
 
-var app = new Vue({
-    el : '#app',
+var app = new Vue({ // eslint-disable-line
+    el: '#app',
     data: {
-        circles : [],
-        circle : '',
+        circles: [],
+        circle: '',
         members: [],
         circle_id: '',
-        users : [],
+        users: [],
         selected_users: [],
         search: ''
     },
     watch: {
-        circle_id:function(val) {
-            var index= _.findIndex(this.circles,function(o) {
-                return o.id==val;
+        circle_id: function (val) {
+            var index = _.findIndex(this.circles, function (o) {
+                return o.id === val;
             });
             this.circle = this.circles[index].circle;
         }
     },
-    components:{
-        's-member':member
+    components: {
+        's-member': member
     },
-    methods:{
-        addMember:function() {
+    methods: {
+        addMember: function () {
             Vue.http.get('{{url("api/v1/token")}}')
-            .then((response)=>{
-                var token=  response.data['token'];
+            .then((response) => {
+                var token = response.data['token'];
                 for (var user in this.selected_users) {
-                    var url= '{{url("api/v1/circle/add")}}'+'?token=' + token+ '&user_id=' + this.selected_users[user] + '&circle_id=' + this.circle_id;
+                    var url = '{{url("api/v1/circle/add")}}' + '?token=' + token + '&user_id=' + this.selected_users[user] + '&circle_id=' + this.circle_id;
                     Vue.http.post(url)
-                    .then((response)=>{
-                        if(response.status != 200){
-                            alert(response.statusText);
+                    .then((response) => {
+                        if (response.status !== 200) {
+                            console.log(response.statusText);
                             return;
                         }
-                        this.members.splice(this.members.length,0,response.data)
-                    })
+                        this.members.splice(this.members.length, 0, response.data);
+                    });
                 }
-                users=[];
-            })
+                this.users = [];
+            });
         },
-        searchChanged : function () {
+        searchChanged: function () {
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data['token'];
                 var url = '{{url("api/v1/task/users")}}' + '?token=' + token + '&user=' + this.search;
                 Vue.http.get(url)
                 .then((response) => {
-                    if(response.status != 200){
-                        alert(response.statusText);
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
                     this.users = response.data;
-                })
+                });
             });
         },
         deleteCircle: function () {
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data['token'];
-                var url = '{{url("api/v1/circle/circle")}}' + '?token=' + token + "&circle_id=" + this.circle_id;
+                var url = '{{url("api/v1/circle/circle")}}' + '?token=' + token + '&circle_id=' + this.circle_id;
                 Vue.http.delete(url)
                 .then((response) => {
-                    if(response.status != 200){
-                        alert(response.statusText);
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
 
-                    var i= _.findIndex(this.circles,function(o) {
-                        return o.id==this.circle_id;
-                    })
-                    this.circles.splice(i,1);
-                })
-            })
-
+                    var i = _.findIndex(this.circles, function (o) {
+                        return o.id === this.circle_id;
+                    });
+                    this.circles.splice(i, 1);
+                });
+            });
         },
-        createCircle: function(){
+        createCircle: function () {
             Vue.http.get('{{url("api/v1/token")}}')
-            .then((response)=>{
-                var t= response.data['token'];
-                var url='{{url("api/v1/circle/create")}}' + '?token='+t+ "&circle="+this.circle;
+            .then((response) => {
+                var t = response.data['token'];
+                var url = '{{url("api/v1/circle/create")}}' + '?token=' + t + '&circle=' + this.circle;
                 Vue.http.post(url)
-                .then((response)=>{
-
-                    if(response.status != 200){
-                        alert(response.statusText);
+                    .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
                     this.circles.push(response.data);
-                })
-
-            })
+                });
+            });
         },
         reloadMember: function () {
             Vue.http.get('{{url("api/v1/token")}}')
-            .then((response)=>{
-                var t= response.data['token'];
-                var url='{{url("api/v1/circle/members")}}'+ '?token='+ t+ "&circle_id="+ this.circle_id;
+            .then((response) => {
+                var t = response.data['token'];
+                var url = '{{url("api/v1/circle/members")}}' + '?token=' + t + '&circle_id=' + this.circle_id;
                 Vue.http.get(url)
-                .then((response)=>{
-
-                    if(response.status != 200){
-                        alert(response.statusText);
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
                     console.log(response.data);
-                    this.members=response.data;
-                })
-
-            })
+                    this.members = response.data;
+                });
+            });
         },
-        editCircle: function(){
+        editCircle: function () {
             Vue.http.get('{{url("api/v1/token")}}')
-            .then((response)=>{
-                var t= response.data['token'];
-                var url='{{url("api/v1/circle/rename")}}'+ '?token='+ t+ '&circle_id='+ this.circle_id+ '&circle='+this.circle;
+            .then((response) => {
+                var t = response.data['token'];
+                var url = '{{url("api/v1/circle/rename")}}' + '?token=' + t + '&circle_id=' + this.circle_id + '&circle=' + this.circle;
                 Vue.http.put(url)
-                .then((response)=>{
-
-                    if(response.status != 200){
-                        alert(response.statusText);
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
-                    var val=this.circle_id
-                    var i= _.findIndex(this.circles,function(o) {
-                        return o.id==val;
-                    })
+                    var val = this.circle_id;
+                    var i = _.findIndex(this.circles, function (o) {
+                        return o.id === val;
+                    });
 
-                    Vue.set(this.circles,i,response.data)
-                })
-
-            })
+                    Vue.set(this.circles, i, response.data);
+                });
+            });
         },
         removeMember: function (val) {
             console.log(val);
 
-            Vue.http.get('{{url('api/v1/token')}}')
+            Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data['token'];
-                var url = '{{url("api/v1/circle/member")}}' + '?token=' + token + "&user_id=" + val +"&circle_id="+this.circle_id;
+                var url = '{{url("api/v1/circle/member")}}' + '?token=' + token + '&user_id=' + val + '&circle_id=' + this.circle_id;
                 Vue.http.delete(url)
                 .then((response) => {
-                    if(response.status != 200){
-                        alert(response.statusText);
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
                         return;
                     }
 
-                    var i = _.findIndex(this.members,function(o) {
-                        return o.id==val;
+                    var i = _.findIndex(this.members, function (o) {
+                        return o.id === val;
                     });
 
                     this.members.splice(i, 1);
-                })
-            })
+                });
+            });
         }
     },
 
-    events: {
-        memberremove: function (val) {
-            console.log(val);
-
-
-        }
-    },
-
-    mounted(){
-        Vue.http.get('{{url('api/v1/token')}}')
-        .then((obj)=>{
-            var t= obj.data['token'];
-            Vue.http.get('{{url('api/v1/circle/circles')}}'+'?token='+t)
-            .then((param)=>{
-                if(param.status != 200){
-                    alert(param.statusText);
+    mounted () {
+        Vue.http.get('{{url("api/v1/token")}}')
+        .then((obj) => {
+            var t = obj.data['token'];
+            Vue.http.get('{{url("api/v1/circle/circles")}}' + '?token=' + t)
+            .then((param) => {
+                if (param.status !== 200) {
+                    console.log(param.statusText);
                     return;
                 }
                 console.log(param.data);
-                this.circles= param.data;
+                this.circles = param.data;
                 this.circle_id = this.circles[0].id;
                 this.reloadMember();
-            })
+            });
         });
-
     }
 
-})
+});
 
-
-
-
-// $('.select2-search__field').attr('v-on:input', 'searchChanged')
-// $('.select2-search__field').attr('v-model', 'user')
+/* eslint-disable indent, no-multi-str */
 </script>
 
 @endsection

@@ -13,6 +13,10 @@ class UserSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $sexes = ['Male', 'Female', 'Other'];
+        $availability = ['Free', 'Busy', 'Unavailable'];
+        $privacy = ['Private', 'Circle', 'Public'];
+        $type = ['Family', 'Friends', 'Work'];
+
         for($i = 0; $i<5; $i++){
             $user = [
                 'user_name' => $faker->unique()->userName,
@@ -39,7 +43,15 @@ class UserSeeder extends Seeder
                 ]);
             }
 
-            DB::table('users')->insert($user);
+            $id = DB::table('users')->insertGetId($user);
+            DB::table('settings')->insert([
+                'user_id' => $id,
+                'availability' => $availability[array_rand($availability)],
+                'privacy' => $privacy[array_rand($privacy)],
+                'type' => $type[array_rand($type)],
+                'created_at' => new Carbon\Carbon,
+                'updated_at' => new Carbon\Carbon,
+            ]);
         }
     }
 }

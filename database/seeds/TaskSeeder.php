@@ -22,7 +22,7 @@ class TaskSeeder extends Seeder
                 'title' => $faker->sentence,
                 'from' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
                 'to' => $faker->dateTimeBetween(new Carbon('next friday'),
-                    (new Carbon('next friday'))->addWeeks(1)),
+                    (new Carbon('next friday'))->addDays(1)),
                 'availability' => $availability[array_rand($availability)],
                 'privacy' => $privacy[array_rand($privacy)],
                 'type' => $type[array_rand($type)],
@@ -33,7 +33,7 @@ class TaskSeeder extends Seeder
             ];
 
             $task_id = DB::table('tasks')->insertGetId($task);
-            $r = rand(1, 4);
+            $r = rand(1, 5);
             if ($r === 1) {
                 DB::table('daily_tasks')->insert([
                     'task_id' => $task_id,
@@ -42,19 +42,23 @@ class TaskSeeder extends Seeder
                     'updated_at' => new Carbon,
                 ]);
             }elseif ($r === 2) {
-                DB::table('weekly_tasks')->insert([
-                    'task_id' => $task_id,
-                    'repetition' => rand(1, 4),
-                    'created_at' => new Carbon,
-                    'updated_at' => new Carbon,
-                ]);
-
-                $days = collect([1, 2, 3, 4, 5, 6, 7])->random(3);
-
+                $dayOfWeek = (Carbon::instance($task['from']))->dayOfWeek;
+                $days = collect([0, 1, 2, 3, 4, 5, 6])->random(3);
+                $repetition = rand(1, 4);
                 foreach ($days as $key => $day) {
-                    DB::table('weekly_repetitions')->insert([
-                        'task_id' => $task_id,
-                        'week_day' => $day,
+                    if($dayOfWeek === $day)
+                        continue;
+                    $temp = $task;
+                    $diff = $day - $dayOfWeek;
+                    if ($diff < 0) {
+                        $diff += 7;
+                    }
+                    $temp['from'] = (Carbon::instance($task['from']))->addDays($diff);
+                    $temp['to'] = (Carbon::instance($task['to']))->addDays($diff);
+                    $new_id = DB::table('tasks')->insertGetId($temp);
+                    DB::table('weekly_tasks')->insert([
+                        'task_id' => $new_id,
+                        'repetition' => $repetition,
                         'created_at' => new Carbon,
                         'updated_at' => new Carbon,
                     ]);

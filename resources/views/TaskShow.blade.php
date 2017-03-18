@@ -231,9 +231,11 @@ div.evenly span{
 @section('script')
 <script src="/js/moment.min.js" charset="utf-8"></script>
 <script type="text/javascript">
-var app=new Vue({
-    el:'#app',
-    data:{
+/* eslint-disable indent */
+/* global Vue, _, moment */
+var app = new Vue({
+    el: '#app',
+    data: {
         task: Object,
         tags: [],
         users: [],
@@ -243,23 +245,23 @@ var app=new Vue({
         current_user: Object,
         task_user: Object
     },
-    methods:{
-        onSearch:function () {
-            Vue.http.get('{{url('api/v1/token')}}')
-            .then((response)=>{
-                var token= response.data.token;
-                var url='{{url("api/v1/task/tags")}}?token=' + token + "&tag=" + this.searchkey;
+    methods: {
+        onSearch: function () {
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data.token;
+                var url = '{{url("api/v1/task/tags")}}?token=' + token + '&tag=' + this.searchkey;
                 Vue.http.get(url)
                 .then((response) => {
-                    if(response.status!=200){
+                    if (response.status !== 200) {
                         console.log(response.statusText);
                         return;
                     }
-                    this.searchresult=response.data;
+                    this.searchresult = response.data;
                 });
-            })
+            });
         },
-        addTag:function () {
+        addTag: function () {
             var toadd = this.tagstoadd;
             for (var i = 0; i < this.tagstoadd.length; i++) {
                 var j = _.findIndex(this.searchresult, function (o) {
@@ -268,114 +270,112 @@ var app=new Vue({
                 this.tags.splice(this.tags.length, 0, this.searchresult[j]);
             }
         },
-        removeTag:function (index) {
-            this.tags.splice(index,1);
+        removeTag: function (index) {
+            this.tags.splice(index, 1);
         },
-        updateTask:function () {
-            Vue.http.get('{{url('api/v1/token')}}')
-            .then((response)=>{
-                var token= response.data.token;
-                var url='{{url("api/v1/task")}}?token=' + token ;
+        updateTask: function () {
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data.token;
+                var url = '{{url("api/v1/task")}}?token=' + token;
                 var obj = {
 
                     id: this.task.id,
                     title: this.task.title,
                     detail: this.task.detail,
-                    from:this.task.from,
-                    to:this.task.to,
-                    availability:this.task.availability,
-                    privacy:this.task.privacy,
-                    type:this.task.type,
-                    location : this.task.location,
+                    from: this.task.from,
+                    to: this.task.to,
+                    availability: this.task.availability,
+                    privacy: this.task.privacy,
+                    type: this.task.type,
+                    location: this.task.location,
                     tags: _.mapValues(this.tags, 'id')
 
-                }
-                Vue.http.put(url,obj)
+                };
+                Vue.http.put(url, obj)
                 .then((response) => {
-                    if(response.status!=200){
+                    if (response.status !== 200) {
                         console.log(response.statusText);
                         return;
                     }
-                    this.task=response.data;
-
+                    this.task = response.data;
                 });
-            })
+            });
         },
-        deleteTask:function () {
-            Vue.http.get('{{url('api/v1/token')}}')
-            .then((response)=>{
-                var token= response.data.token;
-                var url='{{url("api/v1/task")}}?token=' + token +'&task_id='+this.task.id;
+        deleteTask: function () {
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data.token;
+                var url = '{{url("api/v1/task")}}?token=' + token + '&task_id=' + this.task.id;
                 Vue.http.delete(url)
                 .then((response) => {
-                    if(response.status!=200){
+                    if (response.status !== 200) {
                         console.log(response.statusText);
                         return;
                     }
                     window.open('{{url("/home")}}', '_self');
                 });
-            })
+            });
         }
     },
-    mounted(){
-        var url=window.location.href;
-        var i= url.lastIndexOf("/");
-        var id= url.substring(i+1);
-        Vue.http.get('{{url('api/v1/token')}}')
-        .then((response)=>{
-            var token= response.data['token']
+    mounted () {
+        var url = window.location.href;
+        var i = url.lastIndexOf('/');
+        var id = url.substring(i + 1);
+        Vue.http.get('{{url("api/v1/token")}}')
+        .then((response) => {
+            var token = response.data['token'];
 
             Vue.http.get('{{url("api/v1/home/user")}}?token=' + token)
             .then((response) => {
-                if(response.status!=200){
+                if (response.status !== 200) {
                     console.log(response.statusText);
                     return;
                 }
                 this.current_user = response.data;
             });
 
-            Vue.http.get('{{url('api/v1/task')}}'+'?token='+token+'&id='+id)
-            .then((response)=>{
-                if(response.status!=200){
+            Vue.http.get('{{url("api/v1/task")}}' + '?token=' + token + '&id=' + id)
+            .then((response) => {
+                if (response.status !== 200) {
                     console.log(response.status);
                     return;
                 }
-                this.task=response.data;
+                this.task = response.data;
 
-                Vue.http.get('{{url("api/v1/profile/user")}}?token=' + token + "&user_id=" + this.task.user_id)
+                Vue.http.get('{{url("api/v1/profile/user")}}?token=' + token + '&user_id=' + this.task.user_id)
                 .then((response) => {
-                    if(response.status!=200){
+                    if (response.status !== 200) {
                         console.log(response.status);
                         return;
                     }
                     this.task_user = response.data;
                 });
 
-                this.task.from = moment(this.task.from).format("Y-MM-DDTHH:mm:ss");
-                this.task.to = moment(this.task.to).format("Y-MM-DDTHH:mm:ss");
+                this.task.from = moment(this.task.from).format('Y-MM-DDTHH:mm:ss');
+                this.task.to = moment(this.task.to).format('Y-MM-DDTHH:mm:ss');
             });
 
-            Vue.http.get('{{url('api/v1/task/task/users')}}?token='+token+'&task_id='+id)
+            Vue.http.get('{{url("api/v1/task/task/users")}}?token=' + token + '&task_id=' + id)
             .then((response) => {
-                if(response.status!=200){
+                if (response.status !== 200) {
                     console.log(response.statusText);
                     return;
                 }
-                this.users=response.data;
+                this.users = response.data;
             });
 
-            Vue.http.get('{{url('api/v1/task/taks/tags')}}?token='+token + '&task_id='+id)
+            Vue.http.get('{{url("api/v1/task/taks/tags")}}?token=' + token + '&task_id=' + id)
             .then((response) => {
-                if(response.status!=200){
+                if (response.status !== 200) {
                     console.log(response.statusText);
                     return;
                 }
-                this.tags=response.data;
+                this.tags = response.data;
             });
-
-
-        })
+        });
     }
-})
+});
+/* eslint-disable indent */
 </script>
 @endsection
