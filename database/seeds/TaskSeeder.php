@@ -42,7 +42,8 @@ class TaskSeeder extends Seeder
                     'updated_at' => new Carbon,
                 ]);
             }elseif ($r === 2) {
-                $dayOfWeek = (Carbon::instance($task['from']))->dayOfWeek;
+              $from = (Carbon::instance($task['from']));
+                $dayOfWeek = $from->dayOfWeek;
                 $days = collect([0, 1, 2, 3, 4, 5, 6])->random(3);
                 $repetition = rand(1, 4);
                 foreach ($days as $key => $day) {
@@ -53,8 +54,9 @@ class TaskSeeder extends Seeder
                     if ($diff < 0) {
                         $diff += 7;
                     }
-                    $temp['from'] = (Carbon::instance($task['from']))->addDays($diff);
-                    $temp['to'] = (Carbon::instance($task['to']))->addDays($diff);
+                    $temp['from'] = $from->addDays($diff);
+                    $to = (Carbon::instance($task['to']));
+                    $temp['to'] = $to->addDays($diff);
                     $new_id = DB::table('tasks')->insertGetId($temp);
                     DB::table('weekly_tasks')->insert([
                         'task_id' => $new_id,

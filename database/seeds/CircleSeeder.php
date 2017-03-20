@@ -11,10 +11,10 @@ class CircleSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-        $users = App\User::all();
+        $faker = Faker\Factory::create();  //creating object of faker
+        $users = App\User::all();  //retreving all rows from users table
 
-        foreach ($users as $key => $user) {
+        foreach ($users as $key => $user) {  //sequencially accesses all memebers of users array
             for ($i=0; $i < 3; $i++) {
                 DB::table('circles')->insert([
                     'user_id' => $user->id,
@@ -25,7 +25,7 @@ class CircleSeeder extends Seeder
             }
         }
 
-        $circles = App\Circle::all();
+        $circles = App\Circle::all(); //retreving all circles
 
         foreach ($circles as $key => $circle) {
             $rand_users = $users->random(3);
