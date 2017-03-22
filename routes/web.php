@@ -11,29 +11,27 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function (){
+    return view('home');
+})->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-Route::get('/test', function ()
-{
-    return view('test');
-});
-Route::get('/privacy', function(){
-    return view('mimtest');
-});
+Route::get('/home', function (){
+    return view('home');
+})->middleware('auth');
+
 Route::get('/circle', function(){
     return view('Circle');
-});
+})->middleware('auth');
+
 Route::get('/CreateTask',function(){
     return view('CreateTask');
-});
+})->middleware('auth');
+
 Route::get('/task/{id}',function($id){
     return view('TaskShow');
-});
+})->middleware('auth');
 
 Route::get('/api/v1/token', function (Request $request)
 {
