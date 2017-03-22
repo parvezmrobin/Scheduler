@@ -93,16 +93,15 @@ class TaskController extends Controller
         $task = new Task();
         $task->user_id = $request->user()->id;
         $task->title = $request->input('title');
-        $task->from = $request->input('from');
-        $task->to = $request->input('to');
+        $task->from = new Carbon(str_replace('T', ' ', $request->input('from')));
+        $task->to = new Carbon(str_replace('T', ' ', $request->input('to')));
         $task->location = $request->input('location');
         $task->detail = $request->input('detail');
         $task->privacy = $request->input('privacy');
         $task->availability = $request->input('availability');
         $task->type = $request->input('type');
-
         $task->save();
-
+        
         $tags = $request->input('tags');
         if($tags){
             foreach ($tags as $key => $tag) {
@@ -137,8 +136,8 @@ class TaskController extends Controller
         $user = $request->user();
         if($user->id === $task->user_id){
             $task->title = $request->input('title');
-            $task->from = str_replace('T', ' ', $request->input('from'));
-            $task->to = str_replace('T', ' ', $request->input('to'));
+            $task->from = new Carbon(str_replace('T', ' ', $request->input('from')));
+            $task->to = new Carbon(str_replace('T', ' ', $request->input('to')));
             $task->location = $request->input('location');
             $task->detail = $request->input('detail');
             $task->privacy = $request->input('privacy');

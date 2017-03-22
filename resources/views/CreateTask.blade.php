@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="row" id="vm">
+<div class="row" id="vm" v-cloak>
     <div class="panel panel-primary col-md-8 col-md-offset-2 form-horizontal">
         <p class="panel-heading text-centre" style="font-size:xx-large" >Create Task</p>
         <div class="alert alert-danger" v-show="error.length!=0">
@@ -10,7 +10,7 @@
         <div class="form-group">
             <label for="taskTitle" class="control-label col-md-4">Title</label>
             <div class="col-md-6">
-                <input id="taskTitle" type="text" name="taskTitle" v-model='task.title' class="form-control" placeholder="Name of the task" >
+                <input id="taskTitle" type="text" name="taskTitle" v-model="task.title" class="form-control" placeholder="Name of the task" >
             </div>
         </div>
         <br>
@@ -61,7 +61,7 @@
             <label for="type" class="control-label col-md-4">Type</label>
             <div class="col-md-6">
                 <select class="form-control" name="type" id="type" v-model="task.type">
-                    <<option value="Family">Family</option>
+                    <option value="Family">Family</option>
                     <option value="Friend">Friend</option>
                     <option value="Work">Work</option>
                 </select>
@@ -138,169 +138,169 @@
             </div>
         </div>
     </div>
-    @endsection
+</div>
+@endsection
 
-    @section('script')
-    <script src="/js/moment.min.js" charset="utf-8"></script>
-    <script type="text/javascript">
-    /* global Vue,_, moment */
-    new Vue({
-        el : '#vm',
-        data : {
-            task : {
-                title: '',
-                from: '',
-                to: '',
-                location: '',
-                availability: '',
-                privacy: '',
-                type: ''
-            },
-            tags : [],
-            users : [],
-            tsearchkey : '',
-            usearchkey : '',
-            res_users : [],
-            res_tags : [],
-            select_user_id: [],
-            select_tag_id: [],
-            error : '',
-            user_status : 'okay',
-            tag_status : 'okay'
+@section('script')
+<script src="/js/moment.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+/* global Vue,_, moment */
+/* eslint-disable indent */
+var app = new Vue({
+    el: '#vm',
+    data: {
+        task: {
+            title: '',
+            from: '',
+            to: '',
+            location: '',
+            availability: '',
+            privacy: '',
+            type: ''
         },
-        methods : {
-            addUser : function () {
-                for (var id in this.select_user_id) {
-                    var findUser = _.findIndex(this.res_users, ['id', this.select_user_id[id]]);
-                    this.users.splice(this.users.length, 0, this.res_users[findUser]);
-                }
-                this.usearchkey = '';
-                this.res_users = [];
-
-            },
-            uonSearch : function () {
-                this.user_status = 'search';
-                Vue.http.get('{{url("api/v1/token")}}')
-                .then((response) => {
-                    var token = response.data['token'];
-                    Vue.http.get('{{url("api/v1/task/users")}}?token=' + token + '&user=' + this.usearchkey)
-                    .then((response) => {
-                        if(response.status !== 200) {
-                            console.log(response.statusText);
-                            return;
-                        }
-                        this.res_users = response.data;
-                        if(this.res_users.length > 0) {
-                            this.user_status = 'okay';
-                        } else {
-                            this.user_status = 'none';
-                        }
-                    });
-                });
-            },
-            removeUser : function (index) {
-                users.splice(index, 1);
-            },
-            tonSearch : function () {
-                this.tag_status = 'search';
-                Vue.http.get('{{url("api/v1/token")}}')
-                .then((response) => {
-                    var token = response.data['token'];
-                    Vue.http.get('{{url("api/v1/task/tags")}}?token=' + token + '&tag=' + this.tsearchkey)
-                    .then((response) => {
-                        if(response.status !== 200) {
-                            console.log(response.statusText);
-                            return;
-                        }
-                        this.res_tags = response.data;
-                        if(this.res_tags.length > 0) {
-                            this.tag_status = 'okay';
-                        } else {
-                            this.tag_status = 'none';
-                        }
-                    });
-                });
-            },
-            addTag : function () {
-                for (var id in this.select_tag_id) {
-                    var findtag = _.findIndex(this.res_tags, ['id', this.select_tag_id[id]]);
-                    this.tags.splice(this.tags.length, 0, this.res_tags[findtag]);
-                }
-
-                this.tsearchkey = '';
-                this.res_tags = [];
-            },
-            create : function () {
-                if(this.task.title.length === 0) {
-                    this.error = "Title can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.from.length === 0) {
-                    this.error = "Starting time can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.to.length === 0) {
-                    this.error = "Closing time can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.availability.length === 0) {
-                    this.error = "Availability can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.type.length === 0) {
-                    this.error = "Type can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.privacy.length === 0) {
-                    this.error = "Privacy can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                if(this.task.location.length === 0) {
-                    this.error = "Location can't be empty";
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                var newFrom = this.task.from.replace('t', ' ');
-                var newTo = this.task.to.replace('t', ' ');
-                if(moment(newTo).isBefore(moment(newFrom))) {
-                    this.error = 'Ending time must be after strting time';
-                    window.scrollTo(0, 0);
-                    return;
-                }
-                Vue.http.get('{{url("api/v1/token")}}')
-                .then((response) => {
-                    var token = response.data.token;
-                    var obj = {
-                        title : this.task.title,
-                        from: this.task.from,
-                        to: this.task.to,
-                        privacy: this.task.privacy,
-                        availability: this.task.availability,
-                        type: this.task.type,
-                        location: this.task.location,
-                        tags: this.tags,
-                        users: this.users
-                    };
-                    Vue.http.post('{{url("api/v1/task")}}?token=' + token, obj)
-                    .then((response) => {
-                        if (response.status !== 200) {
-                            console.log(response.statusText);
-                            return;
-                        }
-                        //window.open('{{url("task")}}/' + response.data.id, '_self');
-                        console.log('created');
-                    });
-                });
+        tags: [],
+        users: [],
+        tsearchkey: '',
+        usearchkey: '',
+        res_users: [],
+        res_tags: [],
+        select_user_id: [],
+        select_tag_id: [],
+        error: '',
+        user_status: 'okay',
+        tag_status: 'okay'
+    },
+    methods: {
+        addUser: function () {
+            for (var id in this.select_user_id) {
+                var findUser = _.findIndex(this.res_users, ['id', this.select_user_id[id]]);
+                this.users.splice(this.users.length, 0, this.res_users[findUser]);
             }
+            this.usearchkey = '';
+            this.res_users = [];
+        },
+        uonSearch: function () {
+            this.user_status = 'search';
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data['token'];
+                Vue.http.get('{{url("api/v1/task/users")}}?token=' + token + '&user=' + this.usearchkey)
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
+                        return;
+                    }
+                    this.res_users = response.data;
+                    if (this.res_users.length > 0) {
+                        this.user_status = 'okay';
+                    } else {
+                        this.user_status = 'none';
+                    }
+                });
+            });
+        },
+        removeUser: function (index) {
+            this.users.splice(index, 1);
+        },
+        tonSearch: function () {
+            this.tag_status = 'search';
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data['token'];
+                Vue.http.get('{{url("api/v1/task/tags")}}?token=' + token + '&tag=' + this.tsearchkey)
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
+                        return;
+                    }
+                    this.res_tags = response.data;
+                    if (this.res_tags.length > 0) {
+                        this.tag_status = 'okay';
+                    } else {
+                        this.tag_status = 'none';
+                    }
+                });
+            });
+        },
+        addTag: function () {
+            for (var id in this.select_tag_id) {
+                var findtag = _.findIndex(this.res_tags, ['id', this.select_tag_id[id]]);
+                this.tags.splice(this.tags.length, 0, this.res_tags[findtag]);
+            }
+            this.tsearchkey = '';
+            this.res_tags = [];
+        },
+        create: function () {
+            if (this.task.title.length === 0) {
+                this.error = "Title can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.from.length === 0) {
+                this.error = "Starting time can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.to.length === 0) {
+                this.error = "Closing time can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.availability.length === 0) {
+                this.error = "Availability can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.type.length === 0) {
+                this.error = "Type can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.privacy.length === 0) {
+                this.error = "Privacy can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            if (this.task.location.length === 0) {
+                this.error = "Location can't be empty";
+                window.scrollTo(0, 0);
+                return;
+            }
+            var newFrom = moment(this.task.from.replace('T', ' '));
+            var newTo = moment(this.task.to.replace('T', ' '));
+            if (newTo.isBefore(newFrom)) {
+                this.error = 'Ending time must be after strting time';
+                window.scrollTo(0, 0);
+                return;
+            }
+            Vue.http.get('{{url("api/v1/token")}}')
+            .then((response) => {
+                var token = response.data.token;
+                var obj = {
+                    title: this.task.title,
+                    from: this.task.from,
+                    to: this.task.to,
+                    privacy: this.task.privacy,
+                    availability: this.task.availability,
+                    type: this.task.type,
+                    location: this.task.location,
+                    tags: _.map(this.tags, 'id'),
+                    users: _.map(this.users, 'id')
+                };
+                var url = '{{url("api/v1/task/create")}}?token=' + token;
+                Vue.http.post(url, obj)
+                .then((response) => {
+                    if (response.status !== 200) {
+                        console.log(response.statusText);
+                        return;
+                    }
+                    window.open('{{url("task")}}/' + response.data.id, '_self');
+                    // console.log(response.data.id);
+                });
+            });
         }
+    }
+});
+</script>
 
-    });
-    </script>
-
-    @endsection
+@endsection

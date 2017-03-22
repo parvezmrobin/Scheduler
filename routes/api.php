@@ -22,8 +22,8 @@ Route::get('task/tags', 'TaskController@tagSearch');
 Route::get('task/users', 'TaskController@userSearch');
 Route::get('task/taks/tags', 'TaskController@tagTask');
 Route::get('task/task/users', 'TaskController@associations');
-Route::post('task', 'TaskController@create');
-// Route::get('task', 'TaskController@show');
+Route::get('task', 'TaskController@show');
+Route::post('/task/create', 'TaskController@create');
 Route::put('task', 'TaskController@update');
 Route::delete('task', 'TaskController@delete');
 
