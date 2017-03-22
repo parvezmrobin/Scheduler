@@ -2,117 +2,115 @@
 
 @section('content')
 <div class="row col-lg-8 col-md-10 col-lg-offset-2 col-md-offset-1">
-    <!-- <div class="list-group" v-for="circle in circles">
-    <s-circle :circle="circle.circle" :id="circle.id"></s-circle>
-</div> -->
 
-<div class="form-horizontal" v-cloak>
-    <div class="form-group">
-        <label for="circles" class="control-label col-md-2">Select Circle</label>
-        <div class="col-md-10">
-            <select v-on:change="reloadMember" v-model="circle_id" class="form-control" name="circle" >
-                <option :value="circle.id" v-for="circle in circles">@{{circle.circle}}</option>
-            </select>
+    <div class="form-horizontal" v-cloak>
+        <div class="form-group">
+            <label for="circles" class="control-label col-md-2">Select Circle</label>
+            <div class="col-md-10">
+                <select v-on:change="reloadMember" v-model="circle_id" class="form-control" name="circle" >
+                    <option :value="circle.id" v-for="circle in circles">@{{circle.circle}}</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-2 col-md-offset-2">
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCreate">Create Circle </button>
+        <div class="form-group">
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCreate">Create Circle </button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalEdit">Rename </button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalDelete">Delete </button>
+            </div>
         </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalEdit">Rename </button>
+        <hr>
+        <div class="list-group">
+            <s-member v-on:memberremove="removeMember($event)" v-for="member in members" :id="member.id" :member="member.first_name + ' ' + member.last_name"></s-member>
         </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalDelete">Delete </button>
+        <br>
+        <div class="form-group">
+            <label for="users" class="control-label col-md-4">Search Member to Add</label>
+            <div class="col-md-8">
+                <input type="search" placeholder="Type a part of name" class="form-control" v-model="search" name="" value="" v-on:search="searchChanged">
+            </div>
+            <div class="col-md-offset-4 col-md-6">
+                <select class="form-control" multiple="multiple" v-model="selected_users" style="border:none; overflow-y:visible">
+                    <option v-for="user in users" :value="user.id">@{{user.first_name + ' ' +user.last_name}}</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="button" name="" value="Add"
+                class="btn btn-success" style="float:right; margin-top:5px; width:100%" v-on:click="addMember">
+            </div>
         </div>
-    </div>
-    <hr>
-    <div class="list-group">
-        <s-member v-on:memberremove="removeMember($event)" v-for="member in members" :id="member.id" :member="member.first_name + ' ' + member.last_name"></s-member>
-    </div>
-    <br>
-    <div class="form-group">
-        <label for="users" class="control-label col-md-4">Search Member to Add</label>
-        <div class="col-md-8">
-            <input type="search" placeholder="Type a part of name" class="form-control" v-model="search" name="" value="" v-on:search="searchChanged">
-        </div>
-        <div class="col-md-offset-4 col-md-6">
-            <select class="form-control" multiple="multiple" v-model="selected_users" style="border:none; overflow-y:visible">
-                <option v-for="user in users" :value="user.id">@{{user.first_name + ' ' +user.last_name}}</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <input type="button" name="" value="Add"
-            class="btn btn-success" style="float:right; margin-top:5px; width:100%" v-on:click="addMember">
-        </div>
-    </div>
-    <div class="form-group">
+        <div class="form-group">
 
-    </div>
+        </div>
 
 
-    <div class="form-group">
-        <div class='container'>
-            <div class="modal fade" id="modalCreate" role="dialog">
-                <div class="modal-dialog" >
-                    <div class="modal-content col-md-10 col-md-offset-1">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"> &times;
-                            </button>
-                            <h4 class="modal-title"> Name of The Circle </h4>
+        <div class="form-group">
+            <div class="container">
+                <div class="modal fade" id="modalCreate" role="dialog">
+                    <div class="modal-dialog" >
+                        <div class="modal-content col-md-10 col-md-offset-1">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"> &times;
+                                </button>
+                                <h4 class="modal-title"> Name of The Circle </h4>
+                            </div>
+                            <div class= "modal-body">
+                                <div class="col-md-9">
+                                    <input id="CircleName" type="text" v-model="circle" class="form-control" name="CircleName">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" style="float:right" v-on:click="createCircle" class="btn btn-success" data-dismiss="modal">Create </button>
+                                </div>
+                                <br/>
+                                <br/>
+
+                            </div>
                         </div>
-                        <div class= "modal-body">
-                            <div class="col-md-9">
-                                <input id="CircleName" type="text" v-model="circle" class="form-control" name="CircleName">
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modalEdit" role="dialog">
+                    <div class="modal-dialog" >
+                        <div class="modal-content col-md-10 col-md-offset-1">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"> &times;
+                                </button>
+                                <h4 class="modal-title"> Name of The Circle </h4>
                             </div>
-                            <div class="col-md-3">
-                                <button type="button" style="float:right" v-on:click="createCircle" class="btn btn-success" data-dismiss="modal">Create </button>
+                            <div class= "modal-body">
+                                <div class="col-md-9">
+                                    <input type="text" v-model="circle" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" style="float:right" v-on:click="editCircle" class="btn btn-info" data-dismiss="modal">Edit </button>
+                                </div>
+                                <br>
+                                <br>
                             </div>
-                            <br/>
-                            <br/>
+
 
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal fade" id="modalEdit" role="dialog">
-                <div class="modal-dialog" >
-                    <div class="modal-content col-md-10 col-md-offset-1">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"> &times;
-                            </button>
-                            <h4 class="modal-title"> Name of The Circle </h4>
-                        </div>
-                        <div class= "modal-body">
-                            <div class="col-md-9">
-                                <input id="CircleName" type="text" v-model="circle" class="form-control" name="CircleName">
+                <div class="modal fade" id="modalDelete" role="dialog">
+                    <div class="modal-dialog" >
+                        <div class="modal-content col-md-8 col-md-offset-2">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"> &times;
+                                </button>
+                                <h4 class="modal-title"> Are you sure? </h4>
                             </div>
-                            <div class="col-md-3">
-                                <button type="button" style="float:right" v-on:click="editCircle" class="btn btn-info" data-dismiss="modal">Edit </button>
+                            <div class="modal-body">
+                                <button type="button" v-on:click="deleteCircle" class="btn btn-danger" style="float:right" data-dismiss="modal">Yes </button>
+                                <button type="button" class="btn btn-active" data-dismiss="modal">No </button>
                             </div>
-                            <br>
-                            <br>
+
                         </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="modalDelete" role="dialog">
-                <div class="modal-dialog" >
-                    <div class="modal-content col-md-8 col-md-offset-2">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"> &times;
-                            </button>
-                            <h4 class="modal-title"> Are you sure? </h4>
-                        </div>
-                        <div class="modal-body">
-                            <button type="button" v-on:click="deleteCircle" class="btn btn-danger" style="float:right" data-dismiss="modal">Yes </button>
-                            <button type="button" class="btn btn-active" data-dismiss="modal">No </button>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -135,7 +133,6 @@ var member = {
         removeMember: function () {
             this.$emit('memberremove', this.id);
         }
-
     }
 };
 
@@ -220,7 +217,7 @@ var app = new Vue({ // eslint-disable-line
                 var t = response.data['token'];
                 var url = '{{url("api/v1/circle/create")}}' + '?token=' + t + '&circle=' + this.circle;
                 Vue.http.post(url)
-                    .then((response) => {
+                .then((response) => {
                     if (response.status !== 200) {
                         console.log(response.statusText);
                         return;
@@ -266,8 +263,6 @@ var app = new Vue({ // eslint-disable-line
             });
         },
         removeMember: function (val) {
-            console.log(val);
-
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data['token'];
@@ -306,7 +301,6 @@ var app = new Vue({ // eslint-disable-line
             });
         });
     }
-
 });
 
 /* eslint-disable indent, no-multi-str */

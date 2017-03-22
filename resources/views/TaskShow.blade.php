@@ -164,7 +164,7 @@ div.evenly span{
                                     <label for="type" class="control-label col-md-2">Type</label>
                                     <div class="col-md-10">
                                         <select class="form-control" name="type" id="type" v-model="task.type">
-                                            <<option value="Family">Family</option>
+                                            <option value="Family">Family</option>
                                             <option value="Friend">Friend</option>
                                             <option value="Work">Work</option>
                                         </select>
@@ -342,6 +342,7 @@ var app = new Vue({
                     return;
                 }
                 this.task = response.data;
+                console.log(typeof this.task.from);
 
                 Vue.http.get('{{url("api/v1/profile/user")}}?token=' + token + '&user_id=' + this.task.user_id)
                 .then((response) => {

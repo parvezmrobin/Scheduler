@@ -30,57 +30,58 @@
 @section('script')
 <script src="js/moment.min.js" charset="utf-8"></script>
 <script type="text/javascript">
+/* eslint-disable indent */
+/* global Vue, moment */
 var app = new Vue({
-    el:'#app',
+    el: '#app',
     data: {
-        tasks:[],
+        tasks: [],
         tags: []
     },
     methods: {
         formatDateTime: function (dateTime) {
-            var time =  moment(dateTime);
+            var time = moment(dateTime);
 
-            if(time< moment()){
+            if (time < moment()) {
                 return 'Started ' + time.fromNow();
             }
             return 'Starts ' + time.fromNow();
         },
-        makeUrl : function (task) {
-            return '../task/' + task.id
+        makeUrl: function (task) {
+            return '../task/' + task.id;
         },
         chooseClass: function (task) {
-            var now = moment()
-            if(moment(task.from)<=now && moment(task.to)>now){
+            var now = moment();
+            if (moment(task.from) <= now && moment(task.to) > now) {
                 return 'panel panel-info';
             }
             return 'panel panel-default';
         }
     },
-    mounted(){
-        Vue.http.get('{{url('api/v1/token')}}')
-        .then((obj)=>{
-            var token= obj.data['token']
-            var url= '{{url('api/v1/home/tasks')}}'+ '?token=' + token
+    mounted () {
+        Vue.http.get("{{url('api/v1/token')}}")
+        .then((obj) => {
+            var token = obj.data['token'];
+            var url = '{{url("api/v1/home/tasks")}}' + '?token=' + token;
             Vue.http.get(url)
-            .then((response)=>{
-                if(response.status!=200)
-                {
+            .then((response) => {
+                if (response.status !== 200) {
                     console.log(response.statusText);
                     return;
                 }
-                this.tasks=response.data;
+                this.tasks = response.data;
             });
-            url='{{url('api/v1/home/trending')}}?token='+ token;
+            url = '{{url("api/v1/home/trending")}}?token=' + token;
             Vue.http.get(url)
             .then((response) => {
-                if(response.status!=200){
-                    console.log(responsse.statusText);
+                if (response.status !== 200) {
+                    console.log(response.statusText);
                     return;
                 }
-                this.tags=response.data;
+                this.tags = response.data;
             });
-        })
+        });
     }
-})
+});
 </script>
 @endsection
