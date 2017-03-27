@@ -25,6 +25,10 @@ Route::get('/circle', function(){
     return view('Circle');
 })->middleware('auth');
 
+Route::get('/Settings', function(){
+    return view('Settings');
+})->middleware('auth');
+
 Route::get('/CreateTask',function(){
     return view('CreateTask');
 })->middleware('auth');

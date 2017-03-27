@@ -290,7 +290,6 @@ var app = new Vue({
                     type: this.task.type,
                     location: this.task.location,
                     tags: _.mapValues(this.tags, 'id')
-
                 };
                 Vue.http.put(url, obj)
                 .then((response) => {
@@ -353,8 +352,8 @@ var app = new Vue({
                     this.task_user = response.data;
                 });
 
-                this.task.from = moment(this.task.from).format('Y-MM-DDTHH:mm:ss');
-                this.task.to = moment(this.task.to).format('Y-MM-DDTHH:mm:ss');
+                this.task.from = moment(this.task.from).format('LLLL');
+                this.task.to = moment(this.task.to).format('LLLL');
             });
 
             Vue.http.get('{{url("api/v1/task/task/users")}}?token=' + token + '&task_id=' + id)
