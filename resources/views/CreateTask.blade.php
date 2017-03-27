@@ -146,6 +146,7 @@
 <script type="text/javascript">
 /* global Vue,_, moment */
 /* eslint-disable indent */
+/* eslint-disable no-unused-vars */
 var app = new Vue({
     el: '#vm',
     data: {

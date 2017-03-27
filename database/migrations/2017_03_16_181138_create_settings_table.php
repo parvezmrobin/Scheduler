@@ -17,7 +17,7 @@ class CreateSettingsTable extends Migration
             $table->unsignedInteger('user_id')->primary();
             $table->string('privacy');
             $table->string('availability');
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
