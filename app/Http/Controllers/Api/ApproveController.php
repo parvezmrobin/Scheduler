@@ -18,12 +18,13 @@ class ApproveController extends Controller
         $user = $request->user();
         $pendingTasks = DB::table('associations')
         ->join('tasks', 'associations.task_id', 'tasks.id')
+        ->join('users', 'associations.user_id', 'users.id')
         ->where([
-            ['task_user.user_id', $user->id],
-            ['task_user.is_approved', 0],
-            ['tasks.from', '>', new Carbon\Carbon],
+            ['associations.user_id', $user->id],
+            ['associations.is_approved', 0],
+            ['tasks.from', '>', new \Carbon\Carbon],
         ]
-        )->select('tasks.*')->latest()->get();
+        )->select('tasks.*', 'users.first_name', 'users.last_name')->latest()->get();
 
         return response()->json($pendingTasks);
     }
@@ -33,11 +34,13 @@ class ApproveController extends Controller
         $user = $request->user();
         $approvedTasks = DB::table('associations')
         ->join('tasks', 'associations.task_id', 'tasks.id')
+        ->join('users', 'associations.user_id', 'users.id')
         ->where([
             ['associations.user_id', $user->id],
             ['associations.is_approved', 1],
+            ['tasks.from', '>', new \Carbon\Carbon],
         ]
-        )->select('tasks.*')->get();
+        )->select('tasks.*', 'users.first_name', 'users.last_name')->get();
 
         return response()->json($approvedTasks);
     }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row" v-cloak>
-    <div class="col-md-8">
+    <div class="col-md-9 col-sm-8">
         <a v-for="task in tasks" :href="makeUrl(task)" style="text-decoration:none; color:inherit">
             <div :class="chooseClass(task)" >
                 <p class="panel-heading text-centre" style="font-size:xx-large" >@{{task.title}}</p>
@@ -16,9 +16,9 @@
         </a>
     </div>
 
-    <div class="form-group col-md-4">
-        <label for="TrendingTags" class="control-label col-md-4">Trending tags</label>
-        <div class="col-md-8 list-group">
+    <div class="form-group col-md-3 col-sm-4">
+        <label for="TrendingTags" class="control-label">Trending tags</label>
+        <div class="list-group">
             <a class="list-group-item" href="#" v-for="tag in tags" >@{{tag.tag}} <span class="badge">@{{tag.count}}</span></a>
         </div>
     </div>

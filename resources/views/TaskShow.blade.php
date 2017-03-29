@@ -49,8 +49,8 @@ div.evenly span{
                 <p style="font-size:x-large">@{{task.detail}}</p>
 
                 <ul class="list-group col-md-8 col-md-offset-2">
-                    <li class="list-group-item list-group-item-info"><strong>Starts at:</strong> @{{task.from}}</li>
-                    <li class="list-group-item list-group-item-info"><strong>Ends at :</strong> @{{task.to}}</li>
+                    <li class="list-group-item list-group-item-info"><strong>Starts at:</strong> @{{humanize(task.from)}}</li>
+                    <li class="list-group-item list-group-item-info"><strong>Ends at :</strong> @{{humanize(task.to)}}</li>
                 </ul>
                 <ul class="list-group col-md-8 col-md-offset-2">
                     <li class="list-group-item list-group-item-danger">Availability: @{{task.availability}}</li>
@@ -246,6 +246,9 @@ var app = new Vue({
         task_user: Object
     },
     methods: {
+        humanize: function (time) {
+            return moment(time).format('LLLL');
+        },
         onSearch: function () {
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
@@ -352,8 +355,8 @@ var app = new Vue({
                     this.task_user = response.data;
                 });
 
-                this.task.from = moment(this.task.from).format('LLLL');
-                this.task.to = moment(this.task.to).format('LLLL');
+                this.task.from = moment(this.task.from).format('YYYY-MM-DDTHH:mm');
+                this.task.to = moment(this.task.to).format('YYYY-MM-DDTHH:mm');
             });
 
             Vue.http.get('{{url("api/v1/task/task/users")}}?token=' + token + '&task_id=' + id)

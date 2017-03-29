@@ -25,6 +25,10 @@ Route::get('/circle', function(){
     return view('Circle');
 })->middleware('auth');
 
+Route::get('/Approval',function(){
+    return view('approval');
+})->middleware('auth');
+
 Route::get('/Settings', function(){
     return view('Settings');
 })->middleware('auth');
