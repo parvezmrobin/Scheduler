@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="row">
+<div class="row" v-cloak>
         <div class="panel panel-primary col-md-8 col-md-offset-2 form-horizontal">
             <p class="panel-heading text-centre" style="font-size:xx-large">Settings</p>
             <div class="panel-body">
@@ -33,7 +33,7 @@
                             <option value="Family">Family</option>
                             <option value="Friend">Friend</option>
                             <option value="Work">Work</option>
-                            <option value="None">Work</option>
+                            <option value="null">None</option>
                         </select>
                     </div>
                 </div>
@@ -45,10 +45,16 @@
 
 @section('script')
 <script type="text/javascript">
+/* global Vue */
+/* eslint-disable indent */
 var app = new Vue({
     el: '#app',
     data: {
-        setting: Object
+        setting: {
+            privacy: '',
+            availability: '',
+            type: ''
+        }
     },
     methods: {
         changeAvailability: function () {
@@ -72,7 +78,7 @@ var app = new Vue({
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data.token;
-                var privacy = this.setting.availability;
+                var privacy = this.setting.privacy;
                 var url = '{{url("api/v1/settings")}}?token=' + token + '&privacy=' + privacy;
                 Vue.http.put(url)
                 .then((response) => {
@@ -89,7 +95,7 @@ var app = new Vue({
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
                 var token = response.data.token;
-                var type = this.setting.availability;
+                var type = this.setting.type;
                 var url = '{{url("api/v1/settings")}}?token=' + token + '&type=' + type;
                 Vue.http.put(url)
                 .then((response) => {
