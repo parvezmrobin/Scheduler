@@ -352,7 +352,7 @@ var app = new Vue({
                     this.task_user = response.data;
                 });
 
-                // this.task.from = moment(this.task.from).format();
+                this.task.from = moment(this.task.from).format('LLLL');
                 this.task.to = moment(this.task.to).format('LLLL');
             });
 

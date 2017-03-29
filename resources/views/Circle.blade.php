@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('style')
+<style media="screen">
+    .btn{
+        background-color: transparent;
+        color: black;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="row col-lg-8 col-md-10 col-lg-offset-2 col-md-offset-1">
 
@@ -13,14 +22,16 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-2 col-md-offset-2">
-                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCreate">Create Circle </button>
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalEdit">Rename </button>
-            </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalDelete">Delete </button>
+            <div class="btn-group col-md-offset-2" style="float:right" >
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCreate">Create Circle </button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalEdit">Rename </button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalDelete">Delete </button>
+                </div>
             </div>
         </div>
         <hr>

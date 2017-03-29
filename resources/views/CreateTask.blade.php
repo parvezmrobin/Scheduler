@@ -2,149 +2,150 @@
 @section('content')
 <div class="row" id="vm" v-cloak>
     <div class="panel panel-primary col-md-8 col-md-offset-2 form-horizontal">
-        <p class="panel-heading text-centre" style="font-size:xx-large" >Create Task</p>
-        <div class="alert alert-danger" v-show="error.length!=0">
-            <p style="font-size:large">@{{error}}</p>
-        </div>
-
-        <div class="form-group">
-            <label for="taskTitle" class="control-label col-md-4">Title</label>
-            <div class="col-md-6">
-                <input id="taskTitle" type="text" name="taskTitle" v-model="task.title" class="form-control" placeholder="Name of the task" >
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="from" class="control-label col-md-4">Starts at </label>
-            <div class="col-md-6">
-                <input id="from" type="datetime-local" name="from" class="form-control" v-model="task.from" required>
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="to" class="control-label col-md-4">Ends at</label>
-            <div class="col-md-6">
-                <input id="to" type="datetime-local" name="to" class="form-control" v-model="task.to" required>
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="location" class="control-label col-md-4">Location</label>
-            <div class="col-md-6">
-                <input id="location" type="text" name="location" class="form-control" placeholder="Location of the task" v-model="task.location" required>
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="availability" class="control-label col-md-4">Availability</label>
-            <div class="col-md-6">
-                <select class="form-control" name="availability" id="availability" v-model="task.availability">
-                    <option value="Free">Free</option>
-                    <option value="Busy">Busy</option>
-                    <option value="Unavailable">Unavailable</option>
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="privacy" class="control-label col-md-4">Privacy</label>
-            <div class="col-md-6">
-                <select class="form-control" name="privacy" id="privacy" v-model="task.privacy">
-                    <option value="Public">Public</option>
-                    <option value="Circle">Circle</option>
-                    <option value="Private">Private</option>
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="form-group" v-if="task.type!=null">
-            <label for="type" class="control-label col-md-4">Type</label>
-            <div class="col-md-6">
-                <select class="form-control" name="type" id="type" v-model="task.type">
-                    <option value="Family">Family</option>
-                    <option value="Friend">Friend</option>
-                    <option value="Work">Work</option>
-                </select>
-            </div>
-        </div>
-        <br>
-        <div class="form-group" v-show="tags.length!=0">
-            <label for="tags" class="control-label col-md-4">tags</label>
-            <div class="col-md-6">
-                <span v-for="(tag, index) in tags" class="tag-item">
-                    @{{tag.tag}}
-                    <a href="#" @click="removeTag(index)">x</a>
-                </span>
-            </div>
-        </div>
-        <br>
-        <div class="form-group">
-            <label for="tag" class="control-label col-md-4">Search for Tag</label>
-            <div class="col-md-6">
-                <input id="tag" type="search" v-model="tsearchkey" @search="tonSearch" class="form-control">
-            </div>
-            <div class="col-md-6 col-md-offset-4 alert alert-info" v-show="!(tag_status==='okay')">
-                <span v-show="tag_status==='none'">No Result Found</span>
-                <span v-show="tag_status==='search'">Searching...</span>
-            </div>
-        </div>
-        <br>
-        <div class="form-group" v-show="res_tags.length!=0">
-            <div class="col-md-6 col-md-offset-4">
-                <select class="form-control" multiple v-model="select_tag_id">
-                    <option :value="tag.id" v-for="tag in res_tags">@{{tag.tag}}</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="button" @click="addTag" class="btn btn-info">Add Tag</button>
-            </div>
-        </div>
-        <div class="form-group" v-show="users.length!=0">
-            <label for="users" class="control-label col-md-4">Users</label>
-            <div class="col-md-6">
-                <span v-for="(user, index) in users" class="tag-item">
-                    @{{user.first_name+ ' '+user.last_name}}
-                    <a href="#" @click="removeUser(index)">x</a>
-                </span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="user" class="control-label col-md-4">Search for User</label>
-            <div class="col-md-6">
-                <input id="user" type="search" v-model="usearchkey" @search="uonSearch" class="form-control">
-            </div>
-            <div class="col-md-6 col-md-offset-4 alert alert-info" v-show="!(user_status==='okay')">
-                <span v-show="user_status==='none'">No Result Found</span>
-                <span v-show="user_status==='search'">Searching...</span>
+            <p class="panel-heading text-centre" style="font-size:xx-large" >Create Task</p>
+            <div class="alert alert-danger" v-show="error.length!=0">
+                <p style="font-size:large">@{{error}}</p>
             </div>
 
-        </div>
-        <br>
-        <div class="form-group" v-show="res_users.length!=0">
-            <div class="col-md-6 col-md-offset-4">
-                <select class="form-control" multiple v-model="select_user_id">
-                    <option :value="user.id" v-for="user in res_users">@{{user.first_name+ " "+user.last_name}}</option>
-                </select>
+            <div class="form-group">
+                <label for="taskTitle" class="control-label col-md-4">Title</label>
+                <div class="col-md-6">
+                    <input id="taskTitle" type="text" name="taskTitle" v-model="task.title" class="form-control" placeholder="Name of the task" >
+                </div>
             </div>
+            <br>
+            <div class="form-group">
+                <label for="from" class="control-label col-md-4">Starts at </label>
+                <div class="col-md-6">
+                    <input id="from" type="datetime-local" name="from" class="form-control" v-model="task.from" required>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="to" class="control-label col-md-4">Ends at</label>
+                <div class="col-md-6">
+                    <input id="to" type="datetime-local" name="to" class="form-control" v-model="task.to" required>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="location" class="control-label col-md-4">Location</label>
+                <div class="col-md-6">
+                    <input id="location" type="text" name="location" class="form-control" placeholder="Location of the task" v-model="task.location" required>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="availability" class="control-label col-md-4">Availability</label>
+                <div class="col-md-6">
+                    <select class="form-control" name="availability" id="availability" v-model="task.availability">
+                        <option value="Free">Free</option>
+                        <option value="Busy">Busy</option>
+                        <option value="Unavailable">Unavailable</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="privacy" class="control-label col-md-4">Privacy</label>
+                <div class="col-md-6">
+                    <select class="form-control" name="privacy" id="privacy" v-model="task.privacy">
+                        <option value="Public">Public</option>
+                        <option value="Circle">Circle</option>
+                        <option value="Private">Private</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="form-group" v-if="task.type!=null">
+                <label for="type" class="control-label col-md-4">Type</label>
+                <div class="col-md-6">
+                    <select class="form-control" name="type" id="type" v-model="task.type">
+                        <option value="Family">Family</option>
+                        <option value="Friend">Friend</option>
+                        <option value="Work">Work</option>
+                        <option value="null">None</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="form-group" v-show="tags.length!=0">
+                <label for="tags" class="control-label col-md-4">tags</label>
+                <div class="col-md-6">
+                    <span v-for="(tag, index) in tags" class="tag-item">
+                        @{{tag.tag}}
+                        <a href="#" @click="removeTag(index)">x</a>
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="tag" class="control-label col-md-4">Search for Tag</label>
+                <div class="col-md-6">
+                    <input id="tag" type="search" v-model="tsearchkey" @search="tonSearch" class="form-control">
+                </div>
+                <div class="col-md-6 col-md-offset-4 alert alert-info" v-show="!(tag_status==='okay')">
+                    <span v-show="tag_status==='none'">No Result Found</span>
+                    <span v-show="tag_status==='search'">Searching...</span>
+                </div>
+            </div>
+            <br>
+            <div class="form-group" v-show="res_tags.length!=0">
+                <div class="col-md-6 col-md-offset-4">
+                    <select class="form-control" multiple v-model="select_tag_id">
+                        <option :value="tag.id" v-for="tag in res_tags">@{{tag.tag}}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" @click="addTag" class="btn btn-info">Add Tag</button>
+                </div>
+            </div>
+            <div class="form-group" v-show="users.length!=0">
+                <label for="users" class="control-label col-md-4">Users</label>
+                <div class="col-md-6">
+                    <span v-for="(user, index) in users" class="tag-item">
+                        @{{user.first_name+ ' '+user.last_name}}
+                        <a href="#" @click="removeUser(index)">x</a>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="user" class="control-label col-md-4">Search for User</label>
+                <div class="col-md-6">
+                    <input id="user" type="search" v-model="usearchkey" @search="uonSearch" class="form-control">
+                </div>
+                <div class="col-md-6 col-md-offset-4 alert alert-info" v-show="!(user_status==='okay')">
+                    <span v-show="user_status==='none'">No Result Found</span>
+                    <span v-show="user_status==='search'">Searching...</span>
+                </div>
+
+            </div>
+            <br>
+            <div class="form-group" v-show="res_users.length!=0">
+                <div class="col-md-6 col-md-offset-4">
+                    <select class="form-control" multiple v-model="select_user_id">
+                        <option :value="user.id" v-for="user in res_users">@{{user.first_name+ " "+user.last_name}}</option>
+                    </select>
+                </div>
 
 
-            <div class="col-md-2">
-                <button type="button" @click="addUser" class="btn btn-info">Add User</button>
+                <div class="col-md-2">
+                    <button type="button" @click="addUser" class="btn btn-info">Add User</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-4">
+                    <button type="button" @click="create" class="btn btn-info">Create</button>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-4 col-md-offset-4">
-                <button type="button" @click="create" class="btn btn-info">Create</button>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 
 @section('script')
 <script src="/js/moment.min.js" charset="utf-8"></script>
 <script type="text/javascript">
-/* global Vue,_, moment */
+/* global Vue, _, moment */
 /* eslint-disable indent */
 /* eslint-disable no-unused-vars */
 var app = new Vue({
@@ -300,6 +301,19 @@ var app = new Vue({
                 });
             });
         }
+    },
+    mounted () {
+        Vue.http.get('{{url("api/v1/token")}}')
+        .then((response) => {
+            var token = response.data.token;
+            var url = '{{url("api/v1/settings")}}?token=' + token;
+            Vue.http.get(url)
+            .then((response) => {
+                this.task.availability = response.data.availability;
+                this.task.type = response.data.type;
+                this.task.privacy = response.data.privacy + '';
+            });
+        });
     }
 });
 </script>
