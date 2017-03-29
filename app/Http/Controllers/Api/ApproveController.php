@@ -18,7 +18,7 @@ class ApproveController extends Controller
         $user = $request->user();
         $pendingTasks = DB::table('associations')
         ->join('tasks', 'associations.task_id', 'tasks.id')
-        ->join('users', 'associations.user_id', 'users.id')
+        ->join('users', 'tasks.user_id', 'users.id')
         ->where([
             ['associations.user_id', $user->id],
             ['associations.is_approved', 0],
@@ -34,7 +34,7 @@ class ApproveController extends Controller
         $user = $request->user();
         $approvedTasks = DB::table('associations')
         ->join('tasks', 'associations.task_id', 'tasks.id')
-        ->join('users', 'associations.user_id', 'users.id')
+        ->join('users', 'tasks.user_id', 'users.id')
         ->where([
             ['associations.user_id', $user->id],
             ['associations.is_approved', 1],
