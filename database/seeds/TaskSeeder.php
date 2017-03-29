@@ -19,7 +19,7 @@ class TaskSeeder extends Seeder
         for($i = 0; $i<100; $i++){
             $task = [
                 'user_id' => App\User::all()->random()->id,
-                'title' => $faker->sentence,
+                'title' => $faker->unique()->sentence,
                 'from' => $faker->dateTimeBetween(Carbon::today(), new Carbon('next friday')),
                 'to' => $faker->dateTimeBetween(new Carbon('next friday'),
                     (new Carbon('next friday'))->addDays(1)),

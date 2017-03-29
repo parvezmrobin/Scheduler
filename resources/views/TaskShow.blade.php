@@ -19,7 +19,6 @@ div.evenly span{
     display: table-cell;
     text-align: center;
 }
-
 .tag-item{
     border: 1px solid gray;
     border-radius: 5px;
@@ -33,7 +32,6 @@ div.evenly span{
     padding: 5px;
     margin: 5px;
 }
-
 </style>
 @endsection
 @section('content')
@@ -49,8 +47,8 @@ div.evenly span{
                 <p style="font-size:x-large">@{{task.detail}}</p>
 
                 <ul class="list-group col-md-8 col-md-offset-2">
-                    <li class="list-group-item list-group-item-info"><strong>Starts at:</strong> @{{task.from}}</li>
-                    <li class="list-group-item list-group-item-info"><strong>Ends at :</strong> @{{task.to}}</li>
+                    <li class="list-group-item list-group-item-info"><strong>Starts at:</strong> @{{humanize(task.from)}}</li>
+                    <li class="list-group-item list-group-item-info"><strong>Ends at :</strong> @{{humanize(task.to)}}</li>
                 </ul>
                 <ul class="list-group col-md-8 col-md-offset-2">
                     <li class="list-group-item list-group-item-danger">Availability: @{{task.availability}}</li>
@@ -246,6 +244,9 @@ var app = new Vue({
         task_user: Object
     },
     methods: {
+        humanize: function (time) {
+            return moment(time).format('LLLL');
+        },
         onSearch: function () {
             Vue.http.get('{{url("api/v1/token")}}')
             .then((response) => {
@@ -279,7 +280,6 @@ var app = new Vue({
                 var token = response.data.token;
                 var url = '{{url("api/v1/task")}}?token=' + token;
                 var obj = {
-
                     id: this.task.id,
                     title: this.task.title,
                     detail: this.task.detail,
@@ -324,7 +324,6 @@ var app = new Vue({
         Vue.http.get('{{url("api/v1/token")}}')
         .then((response) => {
             var token = response.data['token'];
-
             Vue.http.get('{{url("api/v1/home/user")}}?token=' + token)
             .then((response) => {
                 if (response.status !== 200) {
@@ -333,7 +332,6 @@ var app = new Vue({
                 }
                 this.current_user = response.data;
             });
-
             Vue.http.get('{{url("api/v1/task")}}' + '?token=' + token + '&id=' + id)
             .then((response) => {
                 if (response.status !== 200) {
@@ -342,7 +340,6 @@ var app = new Vue({
                 }
                 this.task = response.data;
                 console.log(typeof this.task.from);
-
                 Vue.http.get('{{url("api/v1/profile/user")}}?token=' + token + '&user_id=' + this.task.user_id)
                 .then((response) => {
                     if (response.status !== 200) {
@@ -351,11 +348,9 @@ var app = new Vue({
                     }
                     this.task_user = response.data;
                 });
-
-                this.task.from = moment(this.task.from).format('LLLL');
-                this.task.to = moment(this.task.to).format('LLLL');
+                this.task.from = moment(this.task.from).format('YYYY-MM-DDTHH:mm');
+                this.task.to = moment(this.task.to).format('YYYY-MM-DDTHH:mm');
             });
-
             Vue.http.get('{{url("api/v1/task/task/users")}}?token=' + token + '&task_id=' + id)
             .then((response) => {
                 if (response.status !== 200) {
@@ -364,7 +359,6 @@ var app = new Vue({
                 }
                 this.users = response.data;
             });
-
             Vue.http.get('{{url("api/v1/task/taks/tags")}}?token=' + token + '&task_id=' + id)
             .then((response) => {
                 if (response.status !== 200) {
