@@ -46,3 +46,5 @@ Route::delete('approve/delete', 'ApproveController@deleteRequest');
 
 Route::get('settings', 'SettingsController@get');
 Route::put('settings', 'SettingsController@set');
+
+Route::get('tag', 'MiscController@tag');

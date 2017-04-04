@@ -19,7 +19,7 @@
     <div class="form-group col-md-3 col-sm-4">
         <label for="TrendingTags" class="control-label">Trending tags</label>
         <div class="list-group">
-            <a class="list-group-item" href="#" v-for="tag in tags" >@{{tag.tag}} <span class="badge">@{{tag.count}}</span></a>
+            <a class="list-group-item" :href="'./tag?tag=' + tag.tag" v-for="tag in tags" >@{{tag.tag}} <span class="badge">@{{tag.count}}</span></a>
         </div>
     </div>
 

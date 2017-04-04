@@ -45,6 +45,10 @@ Route::get('/profile',function(){
     return view('profile');
 })->middleware('auth');
 
+Route::get('/tag',function(){
+    return view('tag');
+})->middleware('auth');
+
 Route::get('/api/v1/token', function (Request $request)
 {
     if(!Auth::check())
