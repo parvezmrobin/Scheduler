@@ -63,7 +63,7 @@ div.evenly span{
                     <div class="col-md-10">
                         <ul class="list-group">
                             <li class="list-group-item" v-for="user in users">
-                                @{{user.first_name+ ' '+user.last_name}}
+                                <a :href="'../profile?id=' + user.id">@{{user.first_name+ ' '+user.last_name}}</a>
                                 <span class="badge" v-show="user.is_approved!='1'">Pending</span>
                             </li>
                         </ul>

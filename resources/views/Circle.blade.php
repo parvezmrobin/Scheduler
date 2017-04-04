@@ -137,12 +137,15 @@
 var member = {
     props: ['id', 'member'],
     template: '<div class="list-group-item list-group-item-info">\
-    @{{member}}\
+    <a :href="link()">@{{member}}</a>\
     <a href="#" v-on:click="removeMember" style="float:right" class="btn btn-sm btn-danger">Delete</a>\
     </div>',
     methods: {
         removeMember: function () {
             this.$emit('memberremove', this.id);
+        },
+        link: function () {
+            return './profile?id=' + this.id;
         }
     }
 };

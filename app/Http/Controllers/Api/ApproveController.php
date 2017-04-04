@@ -24,7 +24,7 @@ class ApproveController extends Controller
             ['associations.is_approved', 0],
             ['tasks.from', '>', new \Carbon\Carbon],
         ]
-        )->select('tasks.*', 'users.first_name', 'users.last_name')->latest()->get();
+        )->select('tasks.*', 'users.first_name', 'users.last_name', 'users.id')->latest()->get();
 
         return response()->json($pendingTasks);
     }
@@ -40,7 +40,7 @@ class ApproveController extends Controller
             ['associations.is_approved', 1],
             ['tasks.from', '>', new \Carbon\Carbon],
         ]
-        )->select('tasks.*', 'users.first_name', 'users.last_name')->get();
+        )->select('tasks.*', 'users.first_name', 'users.last_name', 'users.id')->get();
 
         return response()->json($approvedTasks);
     }

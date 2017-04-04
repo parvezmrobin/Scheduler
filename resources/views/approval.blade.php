@@ -21,8 +21,8 @@
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item" v-for="task in pendings">
-                        <a :href="tasklink(task.id)">@{{task.title}}</a>
-                        @{{' - '+task.first_name+' '+task.last_name}}
+                        <a :href="tasklink(task.id)">@{{task.title}}</a> -
+                        <a :href="'./profile?id=' + task.id">@{{task.first_name+' '+task.last_name}}</a>
                         <div class="btn-group" style="float:right">
                             <div class="btn-group">
                                 <button type="button"  class="btn btn-sm btn-success" name="button" @click="approve(task.id)" >Approve</button>
@@ -43,8 +43,8 @@
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item" v-for="task in approveds">
-                        <a :href="tasklink(task.id)">@{{task.title}}</a>
-                        @{{' - '+task.first_name+' '+task.last_name}}
+                        <a :href="tasklink(task.id)">@{{task.title}}</a> -
+                        <a :href="'./profile?id=' + task.id">@{{task.first_name+' '+task.last_name}}</a>
                         <div class="btn-group" style="float:right">
                             <div class="btn-group">
                                 <button type="button"  class="btn btn-sm btn-success" name="button" @click="disapprove(task.id)">Disapprove</button>
