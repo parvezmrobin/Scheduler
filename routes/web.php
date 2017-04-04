@@ -41,6 +41,10 @@ Route::get('/task/{id}',function($id){
     return view('TaskShow');
 })->middleware('auth');
 
+Route::get('/profile',function(){
+    return view('profile');
+})->middleware('auth');
+
 Route::get('/api/v1/token', function (Request $request)
 {
     if(!Auth::check())

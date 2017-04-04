@@ -23,17 +23,21 @@ class ProfileController extends Controller
         $id = $request->input('user_id');
         $user = $request->user();
         $profile = \App\User::find($id);
-        $allTasks = $profile->upcomingTasks();
-        $tasks = $allTasks->where('privacy_id', 3);
+        $allTasks = \App\Task::where('user_id', $id)
+            ->where('from', '>=', \Carbon\Carbon::now())
+            ->get();
+        $tasks = $allTasks->where('privacy', 'Public');
 
-        foreach ($profile->circles as $key => $circle) {
-            $member = $circle->members->contains($user);
-            if($member){
-                $tasks = $tasks->union($allTasks->where('privacy_id', 2));
+        $circles = \App\Circle::where('user_id', $id)->get();
+
+        foreach ($circles as $key => $circle) {
+            $member = \DB::table('circle_members')->where('circle_id', $circle->id);
+            if($member->count() > 0){
+                $tasks = $tasks->union($allTasks->where('privacy', 'Circle'));
                 break;
             }
         }
 
-        return response()->json($tasks->sortBy('from')->all());
+        return response()->json($tasks->sortByDesc('from')->all());
     }
 }
