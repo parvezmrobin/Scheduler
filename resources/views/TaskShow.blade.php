@@ -77,7 +77,7 @@ div.evenly span{
                     <div class="col-md-10">
 
                         <div>
-                            <span class="tagging" v-for="tag in tags">@{{tag.tag}}</span>
+                            <a :href="'../tag?tag=' + tag.tag" class="tagging" v-for="tag in tags">@{{tag.tag}}</a>
                         </div>
 
                     </div>
