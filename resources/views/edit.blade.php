@@ -99,7 +99,7 @@
                     </select>
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" v-show="searchresult.length !== 0" >
                     <button type="button" @click="addTag" style="float:right" class="btn btn-info">Add Tag</button>
                 </div>
                 <div class="col-md-6 col-md-offset-4 alert alert-info" v-show="!(status==='okay')">
@@ -129,11 +129,11 @@
             searchresult: [],
             searchkey: '',
             tagstoadd: [],
-            status:'okay'
+            status: 'okay'
         },
         methods: {
             onSearch: function () {
-                this.status='search';
+                this.status = 'search';
                 Vue.http.get('{{url("api/v1/token")}}')
                 .then((response) => {
                     var token = response.data.token;
