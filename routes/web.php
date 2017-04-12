@@ -41,6 +41,11 @@ Route::get('/task/{id}',function($id){
     return view('TaskShow');
 })->middleware('auth');
 
+Route::get('/edit/{id}', function ($id)
+{
+    return view('edit');
+})->middleware('auth');
+
 Route::get('/profile',function(){
     return view('profile');
 })->middleware('auth');

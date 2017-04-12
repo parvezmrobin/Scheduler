@@ -1,4 +1,16 @@
 @extends('layouts.app')
+@section('style')
+    <style media="screen">
+    .tag-item{
+        border: 1px solid;
+        border-radius: 5px;
+        border-color: inherit;
+        background-color: skyblue;
+        padding: 5px;
+        margin: 5px;
+    }
+    </style>
+@endsection
 @section('content')
 <div class="row" id="vm" v-cloak>
     <div class="panel panel-primary col-md-8 col-md-offset-2 form-horizontal">
@@ -72,7 +84,7 @@
             <div class="form-group" v-show="tags.length!=0">
                 <label for="tags" class="control-label col-md-4">tags</label>
                 <div class="col-md-6">
-                    <span v-for="(tag, index) in tags" class="tag-item">
+                    <span v-for="(tag, index) in tags" class="tag-item" id="tags">
                         @{{tag.tag}}
                         <a href="#" @click="removeTag(index)">x</a>
                     </span>
@@ -203,6 +215,9 @@ var app = new Vue({
         },
         removeUser: function (index) {
             this.users.splice(index, 1);
+        },
+        removeTag: function (index) {
+            this.tags.splice(index, 1);
         },
         tonSearch: function () {
             this.tag_status = 'search';
