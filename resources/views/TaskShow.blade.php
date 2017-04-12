@@ -76,15 +76,9 @@ div.evenly span{
                         <label for="" class="control-label col-md-2">Tags</label>
                         <div class="col-md-10">
 
-<<<<<<< HEAD
-                        <div>
-                            <a :href="'../tag?tag=' + tag.tag" class="tagging" v-for="tag in tags">@{{tag.tag}}</a>
-                        </div>
-=======
                             <div>
                                 <span class="tagging" v-for="tag in tags">@{{tag.tag}}</span>
                             </div>
->>>>>>> 642d9f4392b15a46da02dc1f73f266e8f9d06de8
 
                         </div>
                     </div>
@@ -135,7 +129,7 @@ div.evenly span{
     <script src="/js/moment.min.js" charset="utf-8"></script>
     <script type="text/javascript">
     /* eslint-disable indent */
-    /* global Vue, _, moment */
+    /* global Vue, moment */
     var app = new Vue({
         el: '#app',
         data: {
@@ -152,7 +146,6 @@ div.evenly span{
             humanize: function (time) {
                 return moment(time).format('LLLL');
             },
-
             deleteTask: function () {
                 Vue.http.get('{{url("api/v1/token")}}')
                 .then((response) => {
