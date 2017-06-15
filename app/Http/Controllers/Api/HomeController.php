@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use App\Task;
 use Carbon\Carbon;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use DB;
 
 class HomeController extends Controller
@@ -24,7 +23,7 @@ class HomeController extends Controller
         $rawWhere = '((associations.user_id = ' . $user->id .
         ' and is_approved = 1) or tasks.user_id = ' . $user->id . ')';
 
-        $genereal = Task::join('associations', 'associations.task_id', 'tasks.id')
+        $general = Task::join('associations', 'associations.task_id', 'tasks.id')
         ->where('to', '>=', Carbon::now())
         ->whereRaw($rawWhere)
         ->select('tasks.*');
@@ -52,7 +51,7 @@ class HomeController extends Controller
         ->whereRaw($rawWhere)->select
         ($this->selectExt('YEAR'));
 
-        $res = $genereal
+        $res = $general
         ->union($daily)
         ->union($weekly)
         ->union($monthly)
@@ -67,7 +66,7 @@ class HomeController extends Controller
 
     public function task(Request $request)
     {
-        $task = \App\Task::find($request->input('task_id'));
+        $task = Task::find($request->input('task_id'));
         if($request->user()->can('view', $task)){
             return response()->json($task);
         }
@@ -95,10 +94,10 @@ class HomeController extends Controller
 
     function selectExt($value)
     {
-        $rawSelect = '`tasks`.`id`, `tasks`.`user_id`, `tasks`.`title`, DATE_ADD(tasks.from, INTERVAL( CEIL(DATEDIFF(NOW(), tasks.from) / repetition) * repetition ) ';
+        $rawSelect = '`tasks`.`id`, `tasks`.`user_id`, `tasks`.`title`, DATE_ADD(tasks.from, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
         $rawSelect .= $value;
         $rawSelect .= ') AS `from`, ';
-        $rawSelect .= 'DATE_ADD(tasks.to, INTERVAL( CEIL(DATEDIFF(NOW(), tasks.from) / repetition) * repetition ) ';
+        $rawSelect .= 'DATE_ADD(tasks.to, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
         $rawSelect .= $value;
         $rawSelect .= ') AS `to`, `tasks`.`availability`, `tasks`.`privacy`, `tasks`.`type`, `tasks`.`location`, `tasks`.`detail`, `tasks`.`created_at`, `tasks`.`updated_at`';
 
