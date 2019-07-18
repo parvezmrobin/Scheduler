@@ -1,5 +1,9 @@
 {
   "private": true,
+  "engines": {
+    "node": "10.x",
+    "npm": "6.x"
+  },
   "scripts": {
     "prod": "gulp --production",
     "dev": "gulp watch",
@@ -14,6 +18,8 @@
     "laravel-elixir-webpack-official": "^1.0.2",
     "lodash": "^4.16.2",
     "vue": "^2.0.1",
-    "vue-resource": "^1.0.3"
+    "vue-resource": "^1.0.3",
+    "node-sass": "^4.0.0",
+    "webpack": "^2"
   }
 }
