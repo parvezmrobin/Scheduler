@@ -96,7 +96,7 @@ class HomeController extends Controller
     {
         $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", ';
         $rawSelect .= '("tasks"."from" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL \'1 ' . $timeUnit . '\') AS "from", ';
-        $rawSelect .= '("tasks"."to" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL\' 1' . $timeUnit . '\') AS "to", ';
+        $rawSelect .= '("tasks"."to" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL\' 1 ' . $timeUnit . '\') AS "to", ';
         $rawSelect .= '"tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
 
         return DB::raw($rawSelect);
