@@ -21,7 +21,7 @@ class HomeController extends Controller
         $user = $request->user();
         $page = $request->input('page');
         $rawWhere = '((associations.user_id = ' . $user->id .
-        ' and is_approved = 1) or tasks.user_id = ' . $user->id . ')';
+        ' and is_approved IS FALSE) or tasks.user_id = ' . $user->id . ')';
 
         $general = Task::join('associations', 'associations.task_id', 'tasks.id')
         ->where('to', '>=', Carbon::now())
