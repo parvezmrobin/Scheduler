@@ -6,4 +6,4 @@
 Homestead.json
 Homestead.yaml
 .env
-package-lock.json
+yarn.lock
