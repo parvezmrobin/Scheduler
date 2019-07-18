@@ -94,12 +94,12 @@ class HomeController extends Controller
 
     function selectExt($value)
     {
-        $rawSelect = '`tasks`.`id`, `tasks`.`user_id`, `tasks`.`title`, DATE_ADD(tasks.from, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
+        $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", DATE_ADD(tasks.from, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
         $rawSelect .= $value;
-        $rawSelect .= ') AS `from`, ';
+        $rawSelect .= ') AS "from", ';
         $rawSelect .= 'DATE_ADD(tasks.to, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
         $rawSelect .= $value;
-        $rawSelect .= ') AS `to`, `tasks`.`availability`, `tasks`.`privacy`, `tasks`.`type`, `tasks`.`location`, `tasks`.`detail`, `tasks`.`created_at`, `tasks`.`updated_at`';
+        $rawSelect .= ') AS "to", "tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
 
         return DB::raw($rawSelect);
     }
