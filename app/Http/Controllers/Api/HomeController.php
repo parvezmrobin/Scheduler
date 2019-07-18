@@ -21,7 +21,7 @@ class HomeController extends Controller
         $user = $request->user();
         $page = $request->input('page');
         $rawWhere = '((associations.user_id = ' . $user->id .
-        ' and is_approved IS FALSE) or tasks.user_id = ' . $user->id . ')';
+        ' and is_approved IS TRUE) or tasks.user_id = ' . $user->id . ')';
 
         $general = Task::join('associations', 'associations.task_id', 'tasks.id')
         ->where('to', '>=', Carbon::now())
@@ -94,11 +94,22 @@ class HomeController extends Controller
 
     function selectExt($timeUnit)
     {
-        $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", ';
-        $rawSelect .= '("tasks"."from" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL \'1 ' . $timeUnit . '\') AS "from", ';
-        $rawSelect .= '("tasks"."to" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL\' 1 ' . $timeUnit . '\') AS "to", ';
-        $rawSelect .= '"tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
+        $dbConfig = config('database.default');
+        if ($dbConfig === 'pgsql') {
+            $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", '
+                . '("tasks"."from" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL \'1 ' . $timeUnit . '\') AS "from", '
+                . '("tasks"."to" + (FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) * INTERVAL\' 1 ' . $timeUnit . '\') AS "to", '
+                . '"tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
+            return DB::raw($rawSelect);
+        } elseif ($dbConfig === 'mysql') {
+            $rawSelect = '`tasks`.`id`, `tasks`.`user_id`, `tasks`.`title`, DATE_ADD(tasks.from, INTERVAL( CEIL(DATEDIFF(NOW(), tasks.from) / repetition) * repetition ) '
+                . $timeUnit
+                . ') AS `from`, '
+                . 'DATE_ADD(tasks.to, INTERVAL( CEIL(DATEDIFF(NOW(), tasks.from) / repetition) * repetition ) '
+                . $timeUnit
+                . ') AS `to`, `tasks`.`availability`, `tasks`.`privacy`, `tasks`.`type`, `tasks`.`location`, `tasks`.`detail`, `tasks`.`created_at`, `tasks`.`updated_at`';
 
-        return DB::raw($rawSelect);
+            return DB::raw($rawSelect);
+        }
     }
 }
