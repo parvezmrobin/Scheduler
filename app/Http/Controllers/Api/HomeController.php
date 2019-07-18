@@ -92,14 +92,12 @@ class HomeController extends Controller
         return response()->json($res);
     }
 
-    function selectExt($value)
+    function selectExt($timeUnit)
     {
-        $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", DATE_ADD(tasks.from, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
-        $rawSelect .= $value;
-        $rawSelect .= ') AS "from", ';
-        $rawSelect .= 'DATE_ADD(tasks.to, INTERVAL( FLOOR((DATEDIFF(NOW(), tasks.from) / repetition) + 1) * repetition ) ';
-        $rawSelect .= $value;
-        $rawSelect .= ') AS "to", "tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
+        $rawSelect = '"tasks"."id", "tasks"."user_id", "tasks"."title", ';
+        $rawSelect .= '("tasks"."from" + INTERVAL( FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) ' . $timeUnit . ') AS "from", ';
+        $rawSelect .= '("tasks"."to" + INTERVAL( FLOOR((DATE_PART(\'day\', NOW() - "tasks"."from") / repetition) + 1) * repetition ) ' . $timeUnit . ') AS "to", ';
+        $rawSelect .= '"tasks"."availability", "tasks"."privacy", "tasks"."type", "tasks"."location", "tasks"."detail", "tasks"."created_at", "tasks"."updated_at"';
 
         return DB::raw($rawSelect);
     }
