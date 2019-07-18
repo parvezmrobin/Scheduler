@@ -70,7 +70,7 @@ return [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'ec2-46-137-91-216.eu-west-1.compute.amazonaws.com'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'ec2-46-137-91-216.eu-west-1.compute.amazonaws.com'),
+            'database' => env('DB_DATABASE', 'dek8jemh69e2sk'),
             'username' => env('DB_USERNAME', 'wbubuayzlpjulm'),
             'password' => env('DB_PASSWORD', 'da3b81f22eb51e3ba171d46bca5d298dab2b28f227450938e49f25f57acf9521'),
             'charset' => 'utf8',
