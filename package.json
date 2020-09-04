@@ -20,7 +20,7 @@
     "lodash": "^4.17.19",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",
-    "node-sass": "^4.0.0",
+    "node-sass": "^4.13.1",
     "webpack": "^2"
   }
 }
